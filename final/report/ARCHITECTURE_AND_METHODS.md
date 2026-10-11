@@ -210,7 +210,7 @@ sequenceDiagram
     alt Unknown
         Pi->>MQTT: recognition Unknown
         MQTT->>Bot: result
-        Note over Bot: Không gửi tin Unknown; tiếp tục nhận diện
+        Note over Bot: Không gửi tin Unknown, tiếp tục nhận diện
     else Thành viên
         Pi->>MQTT: recognition + session request_id
         MQTT->>Bot: result
