@@ -1,0 +1,16 @@
+user edgeface_bot
+topic write aiot/edgeface/command
+topic read aiot/edgeface/status
+topic read aiot/edgeface/result
+topic read aiot/edgeface/telemetry
+topic read aiot/edgeface/collection
+
+user edgeface_pi
+topic read aiot/edgeface/command
+topic write aiot/edgeface/status
+topic write aiot/edgeface/result
+topic write aiot/edgeface/telemetry
+topic write aiot/edgeface/collection
+
+user edgeface_monitor
+topic read aiot/edgeface/#

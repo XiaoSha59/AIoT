@@ -1,0 +1,6 @@
+**
+!pyproject.toml
+!edgeface/**
+!telegram_bot/**
+!scripts/**
+!configs/**

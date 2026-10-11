@@ -1,0 +1,71 @@
+name: edgeface
+services:
+  mosquitto:
+    image: eclipse-mosquitto:2.0.22
+    user: "1883:1883"
+    entrypoint: ["/usr/sbin/mosquitto"]
+    command: ["-c", "/mosquitto/config/mosquitto.conf"]
+    restart: unless-stopped
+    ports:
+      - "${MQTT_BIND_ADDRESS:-127.0.0.1}:${MQTT_PORT:-1883}:1883"
+    volumes:
+      - ./mqtt/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+      - ./mqtt/acl:/mosquitto/config/acl:ro
+      - ./mqtt/secrets/passwd:/mosquitto/config/passwd:ro
+    healthcheck:
+      test: ["CMD-SHELL", "grep -q ':075B ' /proc/net/tcp || grep -q ':075B ' /proc/net/tcp6"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    logging:
+      options: {max-size: "5m", max-file: "3"}
+  mqtt-explorer:
+    profiles: ["monitor"]
+    image: ghcr.io/thomasnordquist/mqtt-explorer@sha256:39a86744a7ba1a07aeadbd059c26c036dfd0e95e112ba967a21f55cd42803a5a
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${MQTT_EXPLORER_PORT:-4000}:3000"
+    environment:
+      NODE_ENV: production
+      PORT: "3000"
+      MQTT_EXPLORER_USERNAME: "${MQTT_EXPLORER_USERNAME:-admin}"
+      MQTT_EXPLORER_PASSWORD: "${MQTT_EXPLORER_PASSWORD:?Run scripts/setup_mqtt.py first}"
+      ALLOWED_ORIGINS: "http://localhost:${MQTT_EXPLORER_PORT:-4000},http://127.0.0.1:${MQTT_EXPLORER_PORT:-4000}"
+      MQTT_AUTO_CONNECT_HOST: mosquitto
+      MQTT_AUTO_CONNECT_PORT: "1883"
+      MQTT_AUTO_CONNECT_PROTOCOL: mqtt
+      MQTT_AUTO_CONNECT_USERNAME: edgeface_monitor
+      MQTT_AUTO_CONNECT_PASSWORD: "${MQTT_MONITOR_PASSWORD:?Run scripts/setup_mqtt.py first}"
+    volumes:
+      - mqtt-explorer-data:/app/data
+    depends_on:
+      mosquitto: {condition: service_healthy}
+    logging:
+      options: {max-size: "5m", max-file: "3"}
+  telegram:
+    profiles: ["bot"]
+    build:
+      context: .
+      dockerfile: telegram_bot/Dockerfile
+    env_file: .env
+    environment:
+      MQTT_HOST: mosquitto
+      MQTT_PORT: "1883"
+      MQTT_USERNAME: edgeface_bot
+    restart: unless-stopped
+    depends_on:
+      mosquitto: {condition: service_healthy}
+    volumes:
+      - bot-state:/app/reports/generated
+    healthcheck:
+      test: ["CMD", "python", "-m", "scripts.healthcheck", "bot"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 40s
+    logging:
+      options: {max-size: "5m", max-file: "3"}
+
+volumes:
+  mqtt-explorer-data:
+  bot-state:

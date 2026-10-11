@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "edgeface"
+version = "0.1.0"
+description = "On-device face classification controlled by Telegram and MQTT"
+requires-python = ">=3.10"
+dependencies = ["numpy==1.26.4", "Pillow==11.3.0", "python-dotenv==1.1.1", "paho-mqtt==2.1.0", "psutil==7.1.0"]
+
+[project.optional-dependencies]
+bot = ["python-telegram-bot==22.5"]
+edge = ["opencv-python-headless==4.11.0.86", "onnxruntime==1.20.1"]
+training = ["torch==2.5.1", "torchvision==0.20.1", "onnx==1.17.0", "onnxruntime==1.20.1", "opencv-python-headless==4.11.0.86", "scikit-learn==1.7.2", "matplotlib==3.10.7"]
+test = ["pytest==8.4.2"]
+monitor-test = ["python-socketio[client]==5.14.2"]
+
+[tool.setuptools.packages.find]
+include = ["edgeface*", "raspberry_pi*", "telegram_bot*", "training*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
