@@ -18,6 +18,10 @@ models/*
 models/releases/*
 !models/releases/d699b7c900ea/
 !models/releases/d699b7c900ea/**
+!models/releases/024f31fdc9b8/
+!models/releases/024f31fdc9b8/**
+!models/releases/5010dc47644c/
+!models/releases/5010dc47644c/**
 runs/
 reports/generated/
 mqtt/secrets/
@@ -25,11 +29,15 @@ mqtt/secrets/
 *.onnx
 !models/face_detection_yunet_2023mar.onnx
 !models/releases/d699b7c900ea/face_classifier.onnx
+!models/releases/024f31fdc9b8/face_classifier.onnx
+!models/releases/5010dc47644c/face_classifier.onnx
 *.pth
 *.pt
 *.jpg
 *.jpeg
 *.png
+!report/assets/team_20261020/*.png
+!report/assets/team_20261020_son_live/*.png
 *.pem
 *.key
 *.egg-info/

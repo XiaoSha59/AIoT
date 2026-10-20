@@ -125,3 +125,24 @@ def test_old_recognition_cannot_stop_new_session(agent):
     assert agent.state == "recognizing" and agent.camera.backend == "fake"
     response = next(v for t, v, retained in agent.link.messages if v.get("event") == "ack")
     assert response["stop_skipped"]
+
+
+@pytest.mark.parametrize("snapshot_fails", [False, True])
+def test_known_snapshot_uses_matching_frame_and_failure_preserves_result(agent, snapshot_fails):
+    from dataclasses import replace
+    from types import SimpleNamespace
+    from unittest.mock import Mock
+
+    agent.cfg = replace(agent.cfg, recognition_photo_enabled=True)
+    agent.link.connected = SimpleNamespace(is_set=lambda: True)
+    agent.detector = FakeDetector([np.array([20, 20, 100, 100], np.float32)])
+    agent.classifier.predict = lambda crop: ("son", .94, 30.0)
+    agent.snapshots.add = Mock(side_effect=OSError("simulated snapshot failure") if snapshot_fails else None,
+                               return_value={"id": "a"*32})
+    agent.frame()
+    result = [v for t, v, _ in agent.link.messages if t == "result"][-1]
+    assert result["person"] == "son" and result["confidence"] == .94
+    assert ("image" in result) is not snapshot_fails
+    args = agent.snapshots.add.call_args.args
+    assert args[0].shape == (224, 224, 3) and args[3] == .94
+    assert agent.state == "recognizing"

@@ -1,0 +1,17 @@
+{
+  "purpose": "Held-out chronological camera tail; not an independent capture session",
+  "camera_test_samples": 26,
+  "old_pipeline_counts": {
+    "son": 18,
+    "tuan": 2,
+    "thanh": 5,
+    "Unknown": 1
+  },
+  "color_fix_only_counts": {
+    "son": 24,
+    "Unknown": 2
+  },
+  "color_fix_and_training_counts": {
+    "son": 26
+  }
+}

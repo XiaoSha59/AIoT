@@ -1,0 +1,22 @@
+{
+  "opset": 17,
+  "ir_version": 8,
+  "input_shape": [
+    1,
+    3,
+    224,
+    224
+  ],
+  "checker": "passed",
+  "samples_compared": 154,
+  "comparison_split": "validation",
+  "max_absolute_logit_difference": 5.340576171875e-05,
+  "mean_max_logit_difference": 2.3139761639879895e-05,
+  "argmax_agreement": 1.0,
+  "rejection_decisions_match": true,
+  "model_size_bytes": 6105639,
+  "onnxruntime": "1.20.1",
+  "torch": "2.14.0+cu130",
+  "checkpoint_sha256": "f83a4ec61dd6eca3aa6d0650dae5d79cd51a0f6e4bd6c1c450d241ef3f9dc80c",
+  "onnx_sha256": "409a4b48a74fa2495fc30c1ac7868c1f648bc708977d54786cde158cd0ab3c6c"
+}

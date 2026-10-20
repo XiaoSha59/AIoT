@@ -18,13 +18,15 @@ from edgeface.mqtt import MQTTLink
 from edgeface.names import load_display_names
 from edgeface.preprocess import save_json
 from edgeface.protocol import decode, make_command, safe_name
+from edgeface.snapshot import fetch_snapshot
 
 log = logging.getLogger(__name__)
 HELP = ("EdgeFace commands:\n/start — enable local Pi recognition\n/stop — release camera\n"
         "/status — device health\n/members — registered members\n"
         "/collect <name> — collect after consent confirmation\n"
         "/collect_unknown <anonymous-id> — one consenting unknown participant per session\n"
-        "/help — commands\nFaces stay on your device. This prototype has no liveness detection.")
+        "/help — commands\nWhen enabled, recognized-member photos are sent to the chat that started recognition. "
+        "This prototype has no liveness detection.")
 
 
 def ids(key: str) -> set[int]:
@@ -50,6 +52,7 @@ class Bot:
         self.consent: dict[str, tuple[int, int, float, dict[str, Any]]] = {}
         self.seen: OrderedDict[str, None] = OrderedDict()
         self.consumer: asyncio.Task | None = None
+        self.recognition_chats: OrderedDict[str, int] = OrderedDict()
 
     def allowed(self, update: Update) -> bool:
         return bool(update.effective_user and update.effective_chat and
@@ -106,16 +109,54 @@ class Bot:
             self.seen[identity] = None
             if len(self.seen) > 512:
                 self.seen.popitem(last=False)
-            text = self.event_text(topic, value)
-            if text:
-                text += await self.auto_stop_result(topic, value)
-            if text:
-                for chat in tuple(self.subscribers):
-                    try:
-                        await app.bot.send_message(chat, text)
-                    except TelegramError:
-                        # Do not log request URLs/token-containing exceptions.
-                        log.warning("Telegram notification failed for an allowed chat")
+            await self.notify_event(app, topic, value)
+
+    async def notify_event(self, app: Application, topic: str, value: dict[str, Any]) -> None:
+        text = self.event_text(topic, value)
+        if not text:
+            return
+        if topic == "result":
+            chat = self.recognition_chats.get(value.get("request_id"))
+            recipients = (chat,) if chat is not None else ()
+        else:
+            recipients = tuple(self.subscribers)
+        # The snapshot is already in Pi RAM; stop the camera before any network upload.
+        text += await self.auto_stop_result(topic, value)
+        for chat in recipients:
+            try:
+                await app.bot.send_message(chat, text)
+                log.info("Telegram result text sent (request_id=%s)", value.get("request_id"))
+            except TelegramError:
+                log.warning("Telegram text notification failed")
+        if (not recipients or not self.cfg.recognition_photo_enabled or topic != "result"
+                or value.get("event") != "recognition" or value.get("person") == "Unknown"):
+            return
+        try:
+            image_id = value["image"]["id"]
+            if not image_id:
+                raise ValueError("Snapshot is unavailable")
+            photo = await asyncio.to_thread(fetch_snapshot, self.cfg, image_id)
+        except Exception as exc:
+            log.warning("Recognition photo download failed (%s)", type(exc).__name__)
+            for chat in recipients:
+                try:
+                    await app.bot.send_message(chat, "Không tải được ảnh nhận diện. Kết quả đã gửi bằng tin nhắn ở trên.")
+                except TelegramError:
+                    log.warning("Telegram photo fallback notification failed")
+            return
+        caption = f"{self.display_name(value['person'])} · Confidence: {value['confidence']:.1%}"
+        for chat in recipients:
+            try:
+                # Separate photo and text messages, as requested.
+                await app.bot.send_photo(chat_id=chat, photo=photo, caption=caption,
+                                         filename="edgeface-recognition.jpg")
+                log.info("Telegram recognition photo sent (request_id=%s)", value.get("request_id"))
+            except TelegramError:
+                log.warning("Telegram recognition photo upload failed")
+                try:
+                    await app.bot.send_message(chat, "Không gửi được ảnh; kết quả nhận diện đã được gửi bằng tin nhắn.")
+                except TelegramError:
+                    log.warning("Telegram photo fallback notification failed")
 
     async def auto_stop_result(self, topic: str, value: dict[str, Any]) -> str:
         person = value.get("person")
@@ -228,9 +269,15 @@ class Bot:
         await self.execute(query.message, command)
 
     async def execute(self, message: Any, command: dict[str, Any]) -> None:
+        # Register before publishing: a fast Pi result may arrive before its start ACK.
+        if command["action"] == "start" and isinstance(getattr(message, "chat_id", None), int):
+            self.recognition_chats[command["request_id"]] = message.chat_id
+            while len(self.recognition_chats) > 128:
+                self.recognition_chats.popitem(last=False)
         try:
             response = await self.dispatch(command)
             if not response.get("ok"):
+                self.recognition_chats.pop(command["request_id"], None)
                 reason = response.get("command_error") or (response.get("error") or {}).get("message", "Unknown device error")
                 await message.reply_text(f"Pi refused command: {reason}")
                 return

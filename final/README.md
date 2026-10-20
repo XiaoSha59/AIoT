@@ -1,13 +1,16 @@
 # EdgeFace
 
-Nhận diện thành viên bằng MobileNetV3-Small fine-tune, chạy **ONNX trực tiếp trên Raspberry Pi 4**, điều khiển qua Telegram và MQTT. Không gửi frame/video qua MQTT hoặc Telegram; không dùng cloud inference.
+Nhận diện thành viên bằng MobileNetV3-Small fine-tune, chạy **ONNX trực tiếp trên Raspberry Pi 4**, điều khiển qua Telegram và MQTT. MQTT chỉ truyền metadata; khi bật gửi ảnh, bot tải một ảnh nhận diện có bounding box qua HTTP/Tailscale rồi gửi Telegram. Không dùng cloud inference.
 
-MVP đã triển khai: một thành viên `son` và lớp `Unknown`, video thành viên do người dùng cung cấp, dữ liệu Unknown LFW công khai, GPU RTX 2050 để training. Người dùng đã xác nhận Telegram hoạt động. Âm thanh tắt; thu thập camera qua Telegram là chức năng bổ sung chưa kiểm chứng end-to-end.
+Phiên bản 20/10/2026 đã train và triển khai 5 thành viên: Dung, Hùng, Nguyễn Hồ Trường Sơn, Thanh, Tuấn cùng lớp `Unknown`. Video do nhóm cung cấp, bổ sung 150 ảnh Sơn thu bằng camera Pi, Unknown lấy từ LFW công khai; training dùng GPU RTX 2050. Âm thanh tắt; thu thập camera qua MQTT đã chạy thực tế.
 
-Model hiện tại được train tiếp với `dataset/videos/son/2.mp4` và dữ liệu cũ, release `d699b7c900ea` (ONNX `5eff47108a6e`). Bundle hiện tại được chia sẻ bằng Git LFS. Dataset/checkpoint/release cũ chỉ giữ cục bộ để rollback; đánh giá và benchmark phiên bản cả team sẽ thực hiện sau khi đủ dữ liệu.
+Release hiện tại `5010dc47644c` (ONNX `1e170d7902b8`) dùng classifier 6 lớp, fine-tune tiếp từ release team ban đầu với dữ liệu camera Sơn và replay dữ liệu cả nhóm. Đã sửa lỗi RGB/BGR khi USB camera đàm phán MJPEG; đạt 181/181 ảnh test, gồm 26 ảnh camera giữ lại, cùng quyết định ONNX trên laptop/Pi. **Các tập vẫn chung phiên quay, chưa là đánh giá độc lập theo phiên.** Bundle được cấu hình quản lý bằng Git LFS; dữ liệu mặt và checkpoint giữ cục bộ, release trước giữ để rollback.
 
 - [Kiến trúc ngắn gọn cho team](docs/ARCHITECTURE.md)
 - [Báo cáo chi tiết kiến trúc và phương pháp — tài nguyên cho team, chưa kèm benchmark](report/ARCHITECTURE_AND_METHODS.md)
+- [Kết quả training, evaluation và deployment cả team — 20/10/2026](report/TEAM_TRAINING_20261020.md)
+- [Sửa màu camera và bổ sung dữ liệu Sơn — 20/10/2026](report/SON_CAMERA_UPDATE_20261020.md)
+- [Tin nhắn và ảnh nhận diện có bounding box trên Telegram](docs/PHOTO_NOTIFICATIONS.md)
 - [Môi trường và trạng thái kiểm chứng](docs/ENVIRONMENT.md)
 - [MQTT Explorer](docs/MQTT_EXPLORER.md)
 - [Tailscale native và tự khởi động WSL/Pi](docs/TAILSCALE.md)
@@ -86,7 +89,19 @@ ssh pi@<PI_IP> 'cd /home/pi/edgeface && .venv/bin/python -m raspberry_pi.camera'
 
 Camera `auto` thử Picamera2/libcamera rồi V4L2; camera USB cũng có thể được libcamera hỗ trợ. Chọn `CAMERA_BACKEND=usb`, `CAMERA_INDEX` khi cần. Pi hiện tại dùng CyberTrack H7 và libcamera USB. Không mở camera khi agent idle.
 
-Pi hiện có IP tĩnh `10.220.139.249/24`, gateway `10.220.139.225`, trên Wi-Fi đang dùng. Profile DHCP gốc được giữ. Đổi subnet cần sửa profile hoặc khôi phục DHCP tại terminal Pi; IP này không bảo đảm dùng ở mọi mạng. Xem [môi trường](docs/ENVIRONMENT.md).
+Pi hiện dùng DHCP trên Wi-Fi; profile `edgeface-static` cũ đã tắt autoconnect để tránh giữ IP/gateway của mạng cũ. SSH qua Tailscale: `ssh pi@100.83.132.53`. Pi vẫn cần thông tin Wi-Fi và Internet của mạng đang dùng. Xem [môi trường](docs/ENVIRONMENT.md).
+
+## Thu thêm ảnh trực tiếp từ Pi
+
+Khi người đồng ý tham gia đứng trước camera, chạy trên laptop:
+
+```bash
+.venv/bin/python -m scripts.collect_member --name son --target 150 --timeout 300 --consent --stop-first
+```
+
+Script gửi command MQTT, đợi ACK/progress theo request ID và tự dừng khi đủ ảnh hoặc hết thời gian. Pi chạy YuNet, chỉ lưu frame có đúng một mặt đạt chất lượng, lọc ảnh gần trùng; ảnh nằm tại Pi `dataset/raw/<name>/<session>/`. Không tự gán nhãn bằng dự đoán model. Đồng bộ bằng `scripts/sync_dataset.sh` trước khi chuẩn bị dataset revision mới.
+
+`training.import_camera_session <session_directory> --dataset <new_revision>` tạo các đoạn train/val/test có khoảng đệm, cùng source recording. `--swap-red-blue` chỉ dành cho ảnh legacy từ bug MJPEG trước bản sửa 20/10; **không dùng cho lần thu mới**. Ảnh gốc và SHA256 được giữ nguyên, ảnh dẫn xuất có provenance riêng.
 
 ## Chuẩn bị dữ liệu từ video
 
@@ -99,7 +114,7 @@ python -m training.dataset audit
 python -m training.dataset split
 ```
 
-YuNet phát hiện mặt trước; crop có xoay theo mắt khi landmarks hợp lệ. Loại frame không/multiple faces, mặt nhỏ, mờ, quá tối/sáng, crop trùng lặp. Blur được đo trên ảnh tham chiếu 224×224 để không phụ thuộc độ phân giải video. Metadata lưu source, session, SHA256 và thời gian trong video. Import lần nữa tạo phiên mới; không import lặp cùng video vào nhiều nhóm dữ liệu.
+Importer đọc metadata xoay của video MP4/MOV và đưa ảnh về đúng hướng trước khi chạy YuNet; crop có xoay theo mắt khi landmarks hợp lệ. Loại frame không/multiple faces, mặt nhỏ, mờ, quá tối/sáng, crop trùng lặp. Blur được đo trên ảnh tham chiếu 224×224 để không phụ thuộc độ phân giải video. Metadata lưu source, session, SHA256, hướng ảnh và thời gian trong video. Import lần nữa tạo phiên mới; không import lặp cùng video vào nhiều nhóm dữ liệu.
 
 MVP một video được người dùng yêu cầu:
 
@@ -114,13 +129,13 @@ Chia các đoạn 0–50% / 60–75% / 85–100%; bỏ trống phần giữa. Đ
 
 ## Training, calibration, đánh giá và ONNX
 
-Để train tiếp một checkpoint với dữ liệu mới có cùng class order/preprocessing, dùng `--init-checkpoint`, replay training data cũ và chọn output mới. Hai video hiện tại dùng `--purged-temporal` khi import và `--allow-multi-video-temporal` khi chia tập; đây vẫn là test trên các phiên đã có dữ liệu train. Với ít nhất ba phiên độc lập, ưu tiên split theo phiên thay cho fallback này. Dataset revision hiện tại là `dataset/revisions/video2/processed`.
+Dataset revision hiện tại là `dataset/revisions/team_20261020_son_live/processed`: 6 video của 5 thành viên, ảnh camera Sơn và Unknown từ 60 danh tính LFW. Dùng `--purged-temporal` khi import video, `--allow-multi-video-temporal` khi chia tập có temporal blocks; đây vẫn là test trên các phiên đã có dữ liệu train. Với ít nhất ba phiên độc lập, ưu tiên split theo phiên. Để train tiếp checkpoint có cùng class order/preprocessing, dùng `--init-checkpoint`, replay training data cũ và chọn output mới.
 
 ```bash
-python -m training.train --data dataset/revisions/video2/processed --output runs/<new_run> --init-checkpoint runs/video2/best_model.pth --head-lr 0.0001 --fine-lr 0.00005 --device auto
+python -m training.train --data dataset/revisions/team_20261020_son_live/processed --output runs/<new_run> --init-checkpoint runs/team_20261020_son_live/best_model.pth --head-lr 0.0001 --fine-lr 0.00005 --device auto
 ```
 
-Các lệnh bên dưới dành cho dataset đầy đủ sau khi chia theo phiên độc lập. Dùng output mới cho từng lần train; hiện chưa chạy lại training hoặc benchmark cho cả team. Không warm-start head hai lớp khi thêm thành viên mới.
+Các lệnh bên dưới áp dụng cho một dataset đã chia tập. Dùng output mới cho từng lần train. Khi thêm class, tạo head mới từ ImageNet; không warm-start trực tiếp head hai lớp cũ. Run cả team đã thực hiện được ghi trong báo cáo ngày 20/10; benchmark camera dài hạn và đánh giá phiên độc lập vẫn cần bổ sung.
 
 ```bash
 TORCH_HOME="$PWD/models/pretrained" python -m training.train --data dataset/processed --output runs/team --device auto --batch-size 16
@@ -164,6 +179,8 @@ Broker/bot/Tailscale trên laptop phải hoạt động. Secrets Pi chỉ gồm 
 | `/collect_unknown <anonymous-id>` | Mỗi participant Unknown có ID ẩn danh riêng để split theo danh tính |
 
 `/start` phản hồi **“Đang nhận diện...”**. Đứng một mình trước camera; khi nhận diện thành viên, bot gửi tên đầy đủ và confidence/latency thật, tự gửi stop và chỉ báo camera đã dừng sau khi Pi xác nhận. **Unknown không gửi tin nhắn Telegram và vẫn tiếp tục nhận diện**; metadata Unknown vẫn có trong MQTT để quan sát/đánh giá. Lệnh tự stop gắn request ID phiên để không dừng nhầm phiên mới. Cooldown mặc định 30 giây mỗi nhãn MQTT trong phiên; `/start` mới reset cooldown để có phản hồi ngay. Nhiều mặt không tự gán nhãn; không có mặt sẽ thông báo sau thời gian cấu hình. Âm thanh tắt.
+
+Tính năng ảnh đã bật cho demo: **tin nhắn kết quả và ảnh được gửi thành hai tin riêng**, về chat đã `/start`. Ảnh đúng frame nhận diện có bbox, tên đầy đủ và confidence; Pi giữ RAM tạm 120 giây, HTTP chỉ bind Tailscale và yêu cầu token. Nếu ảnh lỗi, kết quả chữ và auto-stop vẫn hoạt động. Bật/tắt bằng `RECOGNITION_PHOTO_ENABLED` trên cả Pi/bot; provision secret bằng `scripts.configure_snapshots`. [Cấu hình và luồng chi tiết](docs/PHOTO_NOTIFICATIONS.md).
 
 Tên hiển thị cấu hình tại `configs/display_names.json`: `son` → `Nguyễn Hồ Trường Sơn`. Model/dataset dùng nhãn ổn định; Telegram dùng tên đầy đủ. Đổi mapping không cần train lại. `AUTO_STOP_ON_KNOWN=true` bật hành vi tự dừng.
 

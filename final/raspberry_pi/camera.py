@@ -21,6 +21,7 @@ class Camera:
         self.capture = None
         self.picam = None
         self.backend: str | None = None
+        self.pixel_format: str | None = None
 
     def open(self) -> None:
         self.close()
@@ -37,6 +38,11 @@ class Camera:
                     main={"size": (self.cfg.camera_width, self.cfg.camera_height), "format": "RGB888"},
                     buffer_count=2)
                 self.picam.configure(config)
+                # USB drivers may negotiate MJPEG even when RGB888 was requested.
+                # Picamera2 decodes MJPEG with PIL into RGB, unlike RGB888's BGR bytes.
+                self.pixel_format = self.picam.camera_configuration()["main"]["format"]
+                if self.pixel_format not in {"RGB888", "BGR888", "MJPEG", "XBGR8888", "XRGB8888"}:
+                    raise CameraError(f"Unsupported negotiated pixel format: {self.pixel_format}")
                 self.picam.start()
                 camera_info = info[self.cfg.camera_index]
                 model = str(camera_info.get("Model", "")).lower()
@@ -62,6 +68,12 @@ class Camera:
         try:
             if self.picam is not None:
                 frame = self.picam.capture_array("main")
+                if self.pixel_format in {"MJPEG", "BGR888"}:
+                    frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
+                elif self.pixel_format == "XBGR8888":
+                    frame = cv2.cvtColor(frame, cv2.COLOR_RGBA2BGR)
+                elif self.pixel_format == "XRGB8888":
+                    frame = cv2.cvtColor(frame, cv2.COLOR_BGRA2BGR)
             elif self.capture is not None:
                 ok, frame = self.capture.read()
                 if not ok:
@@ -87,6 +99,7 @@ class Camera:
                 self.picam.close()
                 self.picam = None
         self.backend = None
+        self.pixel_format = None
 
 
 def main() -> None:

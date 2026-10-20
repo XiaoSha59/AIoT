@@ -1,0 +1,44 @@
+{
+  "seed": 42,
+  "classes": [
+    "Unknown",
+    "dung",
+    "hung",
+    "son",
+    "thanh",
+    "tuan"
+  ],
+  "distribution": {
+    "train": {
+      "Unknown": 120,
+      "dung": 71,
+      "hung": 92,
+      "son": 136,
+      "thanh": 71,
+      "tuan": 73
+    },
+    "val": {
+      "Unknown": 26,
+      "dung": 25,
+      "hung": 26,
+      "son": 35,
+      "thanh": 24,
+      "tuan": 18
+    },
+    "test": {
+      "Unknown": 21,
+      "dung": 23,
+      "hung": 30,
+      "son": 38,
+      "thanh": 24,
+      "tuan": 19
+    }
+  },
+  "evaluation_protocols": [
+    "multi_video_purged_temporal",
+    "session_split",
+    "single_video_purged_temporal"
+  ],
+  "independent_known_test": false,
+  "unknown_identity_disjoint": true
+}

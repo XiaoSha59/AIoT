@@ -23,6 +23,7 @@ from raspberry_pi.camera import Camera, CameraError
 from raspberry_pi.collection import Collector
 from raspberry_pi.detection import DetectionError, FaceDetector, crop_face
 from raspberry_pi.inference import Classifier, ModelError
+from raspberry_pi.snapshots import SnapshotService
 
 log = logging.getLogger(__name__)
 
@@ -46,6 +47,7 @@ class Agent:
         self.classifier: Classifier | None = None
         self.collector: Collector | None = None
         self.speaker = Speaker(cfg.audio_enabled, cfg.audio_language)
+        self.snapshots = SnapshotService(cfg)
         self.cooldown = Cooldown(cfg.cooldown)
         self.state = "idle"
         self.error: dict[str, str] | None = None
@@ -150,6 +152,8 @@ class Agent:
                 else:
                     self.collector = Collector(self.cfg, command)
                     self.collector.meta["camera"] = self.camera.backend
+                    self.collector.meta["capture_pixel_format"] = getattr(self.camera, "pixel_format", None)
+                    self.collector.meta["stored_color_order"] = "BGR_to_JPEG"
                     self.state = "collecting"
                     extras = self.collector.progress("started")
                     extras.pop("event")
@@ -216,11 +220,18 @@ class Agent:
                 person, confidence, self.inference_ms = self.classifier.predict(crop)
                 self.e2e_ms = (time.perf_counter() - start) * 1000
                 if self.cooldown.allow(person, now):
+                    image = None
+                    if person != "Unknown" and self.cfg.recognition_photo_enabled and self.link.connected.is_set():
+                        try:
+                            image = self.snapshots.add(frame, faces[0], self.display_names.get(person, person), confidence)
+                        except Exception as exc:
+                            # Image delivery is optional: preserve recognition and auto-stop on failure.
+                            log.warning("Recognition snapshot unavailable (%s)", type(exc).__name__)
                     self.link.publish("result", self.envelope(request_id=self.active_request, event="recognition",
                         person=person, confidence=confidence, inference_ms=self.inference_ms,
                         display_name=self.display_names.get(person, person),
                         detection_ms=self.detection_ms, end_to_end_ms=self.e2e_ms,
-                        model_version=self.classifier.version))
+                        model_version=self.classifier.version, **({"image": image} if image else {})))
                     if person != "Unknown":
                         self.speaker.say(person)
         if self.collector and now-self.last_progress >= 3:
@@ -235,6 +246,11 @@ class Agent:
                 now = time.monotonic()
                 online = self.link.connected.is_set()
                 if online and not connected_before:
+                    if self.cfg.recognition_photo_enabled:
+                        try:
+                            self.snapshots.start()
+                        except Exception as exc:
+                            log.warning("Snapshot HTTP unavailable (%s)", type(exc).__name__)
                     self.link.publish("status", self.status(), retain=True)
                 connected_before = online
                 for _ in range(32):
@@ -262,6 +278,7 @@ class Agent:
             time.sleep(0.2)
             self.link.close()
             self.speaker.close()
+            self.snapshots.close()
             self.db.close()
 
 

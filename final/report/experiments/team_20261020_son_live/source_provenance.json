@@ -1,0 +1,20 @@
+{
+  "source_sha256": {
+    "raspberry_pi/camera.py": "509f07a44fb85f7a29f0ad9de0731bdd6daa4b70cdf2894c7a9d524ee92bc61d",
+    "raspberry_pi/agent.py": "3e6a4c76829e8ad4e593546225daa8c428170ccec80f389aaff1e72099116658",
+    "scripts/collect_member.py": "8808ded01c90c611195137d541826863f0ab1fed233465c7564ca98e69beaec7",
+    "training/import_camera_session.py": "860ea8cf248056f89a6db207041696bbdb7dc85cc091b105fb61dd0f51e3105b",
+    "training/dataset.py": "0e0b7e6e26be582b198dfc07fb244f002846f6d13d37c2302d769e871724c8a6",
+    "training/data.py": "8f5f826c8b322d9fd97117cb43260a447e2612f030230c5fb8629332c0344e4a",
+    "training/train.py": "ca4f78d74c5c12259506ab544d53eb3636cfec4218fde442961249d5eaa0d9e6",
+    "training/evaluate.py": "d24f5212c8075abd0e78f92f30c3c0fc2503d7ce2e046c059b13aaff276a935f",
+    "training/export_onnx.py": "fd8125c65d3f54c502d92298d80e683d1f2695b9524ef23bab20b38064149bc1",
+    "training/verify_onnx.py": "7e5f91bff11509c191a6b5678425edc37e62bae43143706f20d48135f69e05ed",
+    "edgeface/preprocess.py": "7b608acb213c9dd34d8ec19af1f5eb5ed37bc0098362cf2e9d0ac16bfa69a79d"
+  },
+  "dataset_manifest_sha256": "e49dc56d80cda94e6f5132d613b972d0db4f8dfd8ea9b987a1dc777a2b2f88dd",
+  "legacy_capture_pixel_format": "MJPEG",
+  "legacy_capture_array_order": "RGB",
+  "normalized_pipeline_order": "BGR",
+  "capture_session": "b86354bcfd8a4a6b95f178a87319bfcd"
+}

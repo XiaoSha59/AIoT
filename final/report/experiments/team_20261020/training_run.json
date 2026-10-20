@@ -1,0 +1,29 @@
+{
+  "device": "cuda",
+  "gpu": "NVIDIA GeForce RTX 2050",
+  "torch": "2.14.0+cu130",
+  "elapsed_s": 196.06778972099983,
+  "seed": 42,
+  "classifier_max_weight_update": 0.04704377055168152,
+  "last_backbone_max_weight_update": 0.005320973694324493,
+  "best_stage": "fine",
+  "best_epoch": 17,
+  "manifest_sha256": "3a1a1be6375fa48175c8c39167bbe36eeaaa3795f5c7c5d06c6ab8d59c20c493",
+  "initial_checkpoint_sha256": null,
+  "initial_validation_loss": 1.9206167273707204,
+  "initial_validation_accuracy": 0.19480519480519481,
+  "args": {
+    "data": "dataset/revisions/team_20261020/processed",
+    "output": "runs/team_20261020",
+    "head_epochs": 10,
+    "fine_epochs": 20,
+    "batch_size": 16,
+    "patience": 5,
+    "seed": 42,
+    "device": "cuda",
+    "workers": 2,
+    "init_checkpoint": null,
+    "head_lr": 0.001,
+    "fine_lr": 0.0001
+  }
+}

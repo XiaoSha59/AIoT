@@ -25,6 +25,17 @@ def temporal_split(fraction: float) -> str | None:
     return None
 
 
+def orient_frame(frame: np.ndarray, clockwise_degrees: int) -> np.ndarray:
+    """Apply phone display metadata before face detection/cropping."""
+    rotations = {90: cv2.ROTATE_90_CLOCKWISE, 180: cv2.ROTATE_180,
+                 270: cv2.ROTATE_90_COUNTERCLOCKWISE}
+    if clockwise_degrees == 0:
+        return frame
+    if clockwise_degrees not in rotations:
+        raise ValueError(f"Unsupported video display rotation: {clockwise_degrees}")
+    return cv2.rotate(frame, rotations[clockwise_degrees])
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Detect/crop real faces before frame extraction")
     parser.add_argument("video", type=Path)
@@ -49,12 +60,22 @@ def main() -> None:
     if not cap.isOpened():
         raise RuntimeError(f"Cannot open {args.video}")
     try:
+        # OpenCV backends differ in whether they honor display rotation by default.
+        # Disable decoder rotation and apply it once ourselves on sampled frames.
+        cap.set(cv2.CAP_PROP_ORIENTATION_AUTO, 0)
+        decoder_rotates = bool(cap.get(cv2.CAP_PROP_ORIENTATION_AUTO))
+        display_rotation = int(round(cap.get(cv2.CAP_PROP_ORIENTATION_META))) % 360
+        rotation = 0 if decoder_rotates else display_rotation
         fps = cap.get(cv2.CAP_PROP_FPS)
         count = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
         if fps <= 0 or count <= 0:
             raise RuntimeError("Video FPS/duration unavailable")
         duration = count / fps
-        sha = hashlib.sha256(args.video.read_bytes()).hexdigest()
+        digest = hashlib.sha256()
+        with args.video.open("rb") as source:
+            while block := source.read(1024 * 1024):
+                digest.update(block)
+        sha = digest.hexdigest()
         command = make_command("collect", "video-import", name=args.name, consent=True, target=1000)
         collectors: dict[str, Collector] = {}
         modes = ["train", "val", "test"] if args.single_video_temporal else ["session"]
@@ -62,6 +83,8 @@ def main() -> None:
             collector = Collector(cfg, command)
             collector.meta.update(source="participant_video", video=str(args.video), video_sha256=sha,
                 source_recording=sha, duration_s=duration, fps=fps,
+                display_rotation_degrees=display_rotation, decoder_auto_rotation=decoder_rotates,
+                applied_rotation_degrees=rotation, sampling_interval_s=args.interval,
                 evaluation_protocol="single_video_purged_temporal" if args.single_video_temporal else "session_split")
             if mode != "session":
                 collector.meta["forced_split"] = mode
@@ -70,10 +93,7 @@ def main() -> None:
         frame_number = 0
         next_sample = 0.0
         examined = 0
-        while True:
-            ok, frame = cap.read()
-            if not ok:
-                break
+        while cap.grab():
             timestamp = frame_number / fps
             frame_number += 1
             if timestamp + 1e-6 < next_sample:
@@ -82,6 +102,10 @@ def main() -> None:
             split = temporal_split(timestamp/duration) if args.single_video_temporal else "session"
             if split is None:
                 continue
+            ok, frame = cap.retrieve()
+            if not ok:
+                raise RuntimeError(f"Could not decode sampled frame {frame_number}")
+            frame = orient_frame(frame, rotation)
             examined += 1
             collector = collectors[split]
             scale = min(1.0, 640 / max(frame.shape[:2]))
@@ -100,6 +124,8 @@ def main() -> None:
             collector.finish("completed")
             results[mode] = {"saved": collector.accepted, "rejected": dict(collector.rejections), "session": collector.session_id}
         print({"duration_s": duration, "frames_examined": examined, "results": results})
+        if not any(collector.accepted for collector in collectors.values()):
+            raise RuntimeError(f"No valid face crops from {args.video}; inspect orientation, detection and quality")
     finally:
         cap.release()
 

@@ -73,7 +73,7 @@ Sau khi xác minh SSH host key, chuyển MQTT bằng script (preserve các confi
 python -m scripts.connect_tailscale --pi-host pi@<PI_SSH_IP>
 ```
 
-Địa chỉ Tailscale giữ được khi đổi Wi-Fi nếu vẫn giữ node/state hiện có và hai máy truy cập Internet. Pi vẫn phải có cấu hình Wi-Fi/IP vật lý phù hợp: profile IP tĩnh LAN cũ chỉ dùng trên Wi-Fi hiện tại; mạng khác nên tạo profile DHCP. Không cần đổi `MQTT_HOST` mỗi lần đổi mạng.
+Địa chỉ Tailscale giữ được khi đổi Wi-Fi nếu vẫn giữ node/state hiện có và hai máy truy cập Internet. Ngày 20/10 đã chuyển Pi về profile DHCP gốc, tắt autoconnect `edgeface-static`, xác nhận `tailscaled` enabled/active và đăng nhập lại thành công. Mỗi Wi-Fi mới vẫn cần thông tin kết nối của mạng đó. Không cần đổi `MQTT_HOST` mỗi lần đổi mạng.
 
 ## Kiểm chứng và xử lý lỗi
 

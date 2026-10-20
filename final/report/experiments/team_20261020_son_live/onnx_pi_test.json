@@ -1,0 +1,128 @@
+{
+  "device": "raspberrypi",
+  "architecture": "aarch64",
+  "onnxruntime": "1.20.1",
+  "provider": [
+    "CPUExecutionProvider"
+  ],
+  "threads": 2,
+  "warmup": 20,
+  "model_version": "1e170d7902b8",
+  "bundle_version": "5010dc47644c",
+  "manifest_sha256": "e49dc56d80cda94e6f5132d613b972d0db4f8dfd8ea9b987a1dc777a2b2f88dd",
+  "classes": [
+    "Unknown",
+    "dung",
+    "hung",
+    "son",
+    "thanh",
+    "tuan"
+  ],
+  "threshold": 0.5833254400273035,
+  "samples": 181,
+  "accuracy": 1.0,
+  "raw_argmax_accuracy": 1.0,
+  "known_member_accuracy": 1.0,
+  "unknown_rejection_rate": 1.0,
+  "false_acceptance_rate": 0.0,
+  "macro_f1": 1.0,
+  "per_class": {
+    "Unknown": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 21
+    },
+    "dung": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 23
+    },
+    "hung": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 30
+    },
+    "son": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 64
+    },
+    "thanh": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 24
+    },
+    "tuan": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 19
+    }
+  },
+  "confusion_matrix": [
+    [
+      21,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      23,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      30,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      64,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      24,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      19
+    ]
+  ],
+  "independent_known_test": false,
+  "unknown_identity_disjoint": true,
+  "test_inference_latency": {
+    "mean_ms": 30.361857143643093,
+    "p50_ms": 30.113611000160745,
+    "p95_ms": 30.73349699980099,
+    "definition": "One classifier session.run per test crop, after warmup; preprocessing excluded; not camera FPS"
+  },
+  "process_rss_mb": 100.96484375,
+  "cross_device_verified": true,
+  "max_reference_logit_difference": 2.8133392333984375e-05
+}

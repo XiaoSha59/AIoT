@@ -41,6 +41,14 @@ class Config:
     command_ttl: float = field(default_factory=lambda: float(os.getenv("COMMAND_TTL_S", "60")))
     audio_enabled: bool = field(default_factory=lambda: os.getenv("AUDIO_ENABLED", "false").lower() == "true")
     audio_language: str = field(default_factory=lambda: os.getenv("AUDIO_LANGUAGE", "vi"))
+    recognition_photo_enabled: bool = field(default_factory=lambda: os.getenv("RECOGNITION_PHOTO_ENABLED", "false").lower() == "true")
+    snapshot_token: str = field(default_factory=lambda: os.getenv("SNAPSHOT_TOKEN", ""), repr=False)
+    snapshot_base_url: str = field(default_factory=lambda: os.getenv("SNAPSHOT_BASE_URL", ""))
+    snapshot_bind: str = field(default_factory=lambda: os.getenv("SNAPSHOT_BIND", "127.0.0.1"))
+    snapshot_port: int = field(default_factory=lambda: int(os.getenv("SNAPSHOT_PORT", "8765")))
+    snapshot_ttl: float = field(default_factory=lambda: float(os.getenv("SNAPSHOT_TTL_S", "120")))
+    snapshot_timeout: float = field(default_factory=lambda: float(os.getenv("SNAPSHOT_TIMEOUT_S", "5")))
+    snapshot_font: Path = field(default_factory=lambda: Path(os.getenv("SNAPSHOT_FONT", "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf")))
 
     @classmethod
     def load(cls) -> Config:
@@ -54,4 +62,8 @@ class Config:
             raise ValueError("COLLECTION_TARGET must be between 1 and 1000")
         if cfg.camera_backend not in {"auto", "usb", "csi"}:
             raise ValueError("CAMERA_BACKEND must be auto, usb or csi")
+        if cfg.recognition_photo_enabled and len(cfg.snapshot_token) < 32:
+            raise ValueError("Photo notifications require SNAPSHOT_TOKEN with at least 32 characters")
+        if cfg.snapshot_ttl <= 0 or cfg.snapshot_timeout <= 0 or not 1 <= cfg.snapshot_port <= 65535:
+            raise ValueError("Invalid snapshot TTL, timeout or port")
         return cfg

@@ -4,9 +4,13 @@
 
 **Phạm vi tài liệu:** kiến trúc, mô hình, xử lý dữ liệu, fine-tuning, chuyển đổi ONNX, triển khai và các kỹ thuật đã xây dựng. Tài liệu là nguồn để team biên soạn báo cáo chính thức và bài thuyết trình về sau.
 
-**Ngày cập nhật:** 11/10/2026.
+**Ngày cập nhật:** 20/10/2026.
 
-**Chưa trình bày kết quả thực nghiệm:** chưa đưa accuracy, loss đo được, latency, FPS, mức sử dụng tài nguyên hoặc đối sánh benchmark của bản thử nghiệm một thành viên vào tài liệu này. Sau khi đủ dữ liệu của cả team, cần train lại và thực hiện đánh giá/benchmark cho phiên bản cuối.
+**Kết quả thực nghiệm được tách riêng:** tài liệu này tập trung vào kiến trúc và phương pháp. Training 5 thành viên + Unknown, số liệu evaluation và xác minh release trên Pi ngày 20/10 được ghi trong [báo cáo thực nghiệm cả team](TEAM_TRAINING_20261020.md). Đánh giá phiên quay độc lập và benchmark camera dài hạn vẫn cần bổ sung.
+
+Xem thêm [sửa màu camera USB MJPEG và training bổ sung Sơn](SON_CAMERA_UPDATE_20261020.md).
+
+Cập nhật gửi ảnh nhận diện: [luồng HTTP/Tailscale và Telegram](../docs/PHOTO_NOTIFICATIONS.md). Người dùng đã xác nhận nhận được hai tin riêng: kết quả chữ và ảnh có bounding box, tên, confidence.
 
 ## Mục lục
 
@@ -43,9 +47,9 @@ Face detection và face classification là hai bài toán riêng. Detector xác 
 
 Hệ thống kết hợp ba phần: camera và xử lý ảnh tại Pi; pipeline training/export trên laptop; ứng dụng điều khiển, giám sát bằng Telegram và MQTT Explorer. Laptop có thể dùng GPU để training, nhưng **toàn bộ inference khi vận hành nằm trên Pi**.
 
-Telegram Cloud chỉ phục vụ gửi/nhận lệnh và tin nhắn. MQTT chỉ truyền JSON chứa command, trạng thái, sự kiện và telemetry. Video, frame camera và crop mặt không được gửi qua MQTT hoặc lên Telegram theo cấu hình mặc định.
+Telegram Cloud phục vụ lệnh, tin nhắn và ảnh nhận diện khi bật tính năng gửi ảnh. MQTT chỉ truyền JSON chứa command, trạng thái, sự kiện, telemetry và mã ảnh; không truyền bytes/base64 ảnh. Pi tạo JPEG có bounding box, tên và confidence sau suy luận; bot tải qua HTTP trong Tailscale có bearer token rồi gửi Telegram, không chạy inference trên laptop/cloud. Mẫu cấu hình mặc định tắt gửi ảnh; phiên demo đã bật theo yêu cầu người dùng.
 
-Phiên bản hiện tại ưu tiên nhận diện qua Telegram; thu thập bằng camera qua bot đã có module nhưng chưa là nguồn dataset của cả team. Âm thanh đang tắt. Không có liveness detection và không xem hệ thống là giải pháp kiểm soát truy cập chống giả mạo đã được kiểm chứng.
+Phiên bản hiện tại ưu tiên nhận diện qua Telegram; đã thu 150 ảnh Sơn từ camera Pi qua MQTT và fine-tune bổ sung; các thành viên khác vẫn dùng video. Âm thanh đang tắt. Không có liveness detection và không xem hệ thống là giải pháp kiểm soát truy cập chống giả mạo đã được kiểm chứng.
 
 ## 2. Kiến trúc tổng thể
 
@@ -72,13 +76,16 @@ flowchart TB
         Detector[YuNet · detector]
         Preprocess[Crop / alignment / RGB / normalization]
         Classifier[MobileNetV3-Small · ONNX Runtime CPU]
+        Photos[Annotated JPEG · bounded RAM cache]
         VPNPi <--> Agent
         Agent -->|Mở hoặc đóng| Camera
         Camera --> Detector --> Preprocess --> Classifier
         Classifier -->|Danh tính hoặc Unknown| Agent
+        Agent -->|Known recognition frame| Photos
     end
     VPNWSL <-->|Mạng riêng Tailscale| VPNPi
     Training -.->|Deploy bundle bằng SSH| Classifier
+    Photos -->|HTTP trong Tailscale có token| Bot
 ```
 
 Đường nét đứt biểu diễn deployment, không phải đường gửi ảnh để suy luận từ xa. Khi demo, classifier nhận dữ liệu từ camera Pi, không gọi mô hình trên laptop.
@@ -212,7 +219,8 @@ sequenceDiagram
         MQTT->>Bot: result
         Note over Bot: Không gửi tin Unknown, tiếp tục nhận diện
     else Thành viên
-        Pi->>MQTT: recognition + session request_id
+        Note over Pi: Vẽ bbox, tên, confidence trên frame nhận diện
+        Pi->>MQTT: recognition + session request_id + image.id
         MQTT->>Bot: result
         Bot->>MQTT: stop + expected_request_id
         MQTT->>Pi: guarded stop
@@ -220,10 +228,15 @@ sequenceDiagram
         Pi->>MQTT: ack idle
         MQTT->>Bot: ack
         Bot->>User: Tên, confidence, thông tin inference và xác nhận dừng
+        Bot->>Pi: HTTP GET ảnh qua Tailscale có token
+        Pi->>Bot: JPEG từ RAM, camera đã đóng
+        Bot->>User: Tin ảnh riêng có bbox, tên và confidence
     end
 ```
 
 Unknown vẫn có trên MQTT để quan sát; chỉ bị ẩn ở giao diện Telegram. No-face và multiple-faces là các sự kiện khác, không kích hoạt auto-stop như thành viên. Bot không thông báo đã dừng thành công nếu chưa có ack phù hợp.
+
+Kết quả chữ được gửi trước ảnh; lỗi ảnh không làm mất kết quả chữ hoặc chặn auto-stop. Bot gắn request ID phiên `/start` với chat khởi tạo, tránh gửi ảnh cho mọi người từng dùng bot. Ảnh chỉ nằm trong cache RAM Pi tối đa 8 ảnh, mỗi ảnh tối đa 2 MiB, TTL 120 giây; HTTP bind IP Tailscale và kiểm tra bearer token riêng. Camera stop không xóa cache ngay, cho phép bot tải sau ACK idle. Ảnh gửi lên Telegram thuộc phạm vi được người dùng đồng ý, không còn là dữ liệu chỉ giữ cục bộ.
 
 ### 5.4. Cooldown và tên hiển thị
 
@@ -239,7 +252,7 @@ Class ID và tên hiển thị tách biệt. Ví dụ `son` được mapping th�
 
 Kích thước capture, index camera và backend đều cấu hình được. Buffer được giới hạn trong cấu hình capture; không lưu một hàng đợi frame tăng không giới hạn. Camera chỉ mở khi có lệnh cần camera, được đóng khi stop, lỗi hoặc shutdown.
 
-Camera trả frame BGR cho pipeline OpenCV. Picamera2 `RGB888` có byte ordering tương ứng BGR trong cách capture đang dùng, nên việc chuyển sang RGB được thực hiện ở bước preprocess chung. Tên format và thứ tự byte phải được phân biệt để tránh đổi sai kênh màu.
+Camera trả frame BGR cho pipeline OpenCV. Đọc format thực sau đàm phán: Picamera2 `RGB888` có byte ordering BGR, nhưng USB camera hiện tại đàm phán `MJPEG`, được Picamera2 giải mã thành RGB nên phải chuyển về BGR ngay sau capture. Sau đó classifier mới chuyển sang RGB ở preprocess chung. Tên format và thứ tự byte phải được phân biệt để tránh đổi sai kênh màu.
 
 ### 6.2. Detector YuNet
 
@@ -352,7 +365,7 @@ RGB face crop
 
 `Linear(1024, K)` được khởi tạo cho số class của dataset. Phần còn lại lấy từ pretrained weights khi train mới. Danh sách `classes.json` cố định thứ tự output; không được đổi thứ tự file này sau export mà không cập nhật trọng số tương ứng.
 
-Ví dụ tên thành viên trên Telegram có thể thay qua mapping, nhưng số class và class ID thuộc mô hình. Khi đủ dữ liệu cả team, classifier phải được tạo với đúng `N + 1` output.
+Ví dụ tên thành viên trên Telegram có thể thay qua mapping, nhưng số class và class ID thuộc mô hình. Release ngày 20/10 dùng `N = 5`, `K = 6`, theo thứ tự `Unknown`, `dung`, `hung`, `son`, `thanh`, `tuan`.
 
 ### 8.3. Quan hệ giữa các model
 
@@ -607,6 +620,7 @@ Frame interval là khoảng nghỉ trong vòng xử lý, không phải cam kết
 | Health | JSON snapshot của trạng thái mới nhất |
 | MQTT status retained | Snapshot broker, không phải lịch sử dữ liệu |
 | MQTT Explorer | Giao diện quan sát realtime; chưa xem là database lịch sử |
+| Ảnh recognition có annotation | RAM Pi có TTL/giới hạn số ảnh, HTTP/Tailscale tới bot rồi upload Telegram khi bật; không ghi vào dataset |
 
 SQLite hiện có bảng `requests(id, response, created)`. Chức năng chính là chống replay, **chưa có service ghi liên tục recognition/telemetry vào database để truy vấn lịch sử**. Đây là khoảng trống ở phần lưu trữ realtime theo rubric. Có thể bổ sung SQL/InfluxDB sau, nhưng không mô tả thành phần đó như đã triển khai trong kiến trúc hiện tại.
 
@@ -620,7 +634,7 @@ Bot hỗ trợ allowlist user/chat ID. Cấu hình MVP hiện để trống theo
 
 ### 14.5. Dữ liệu sinh trắc học và xóa dữ liệu
 
-Thu thập local yêu cầu consent và giữ người ngoài nhóm khỏi frame khi không có sự đồng ý. Crop/metadata thu thập được giới hạn quyền truy cập; dataset và checkpoint được gitignore. Ảnh diagnostic không mặc định gửi lên Telegram.
+Thu thập local yêu cầu consent và giữ người ngoài nhóm khỏi frame khi không có sự đồng ý. Crop/metadata thu thập được giới hạn quyền truy cập; dataset và checkpoint được gitignore. Ảnh diagnostic không mặc định gửi lên Telegram; riêng snapshot nhận diện known có annotation được gửi khi `RECOGNITION_PHOTO_ENABLED=true`, đã bật cho demo theo yêu cầu và xác nhận của người dùng.
 
 `delete_member.py` có dry-run và yêu cầu xác nhận đúng tên trước khi xóa. Script không tự quét mọi dataset revision: phải chọn đúng `--dataset` cho mỗi revision và xử lý các bản sao/diagnostic/benchmark riêng. Xóa ảnh cũng không xóa thông tin đã học khỏi trọng số; cần loại bỏ hoặc retrain/redeploy model và xử lý các bản backup liên quan.
 
@@ -656,9 +670,9 @@ Bảng dưới đánh giá mức sẵn có của kiến trúc và phương pháp
 
 | Hạng mục | Thành phần/phương pháp hiện có | Phần cần hoàn thiện cho phiên bản cuối |
 |---|---|---|
-| Data Pipeline — 20% | Video/dataset có provenance; face crop, audit/split; MQTT có schema/QoS/ACL; SQLite request dedup | Dataset cả team; lưu history recognition/telemetry trong database có thể truy vấn |
-| Edge AI — 20% | MobileNetV3-Small pretrained fine-tuning; YuNet; shared preprocessing; ONNX Runtime CPU tại Pi | Train classifier đầy đủ thành viên; kiểm tra lại export/deploy; không gán nhãn INT8 khi chưa làm |
-| Định lượng/benchmark — 10% | Có pipeline và công cụ cho evaluation, export parity và phép đo tại edge | Thực hiện sau khi dataset/model cả team sẵn sàng; chưa đưa kết quả bản một người vào tài liệu này |
+| Data Pipeline — 20% | Video 5 thành viên và Unknown có provenance; face crop, audit/split; MQTT có schema/QoS/ACL; SQLite request dedup | Bổ sung phiên độc lập/camera Pi; lưu history recognition/telemetry trong database có thể truy vấn |
+| Edge AI — 20% | MobileNetV3-Small fine-tune 6 lớp; YuNet; shared preprocessing; ONNX Runtime CPU; release mới đã chạy trên Pi | Đánh giá độ bền ở phiên mới; không gán nhãn INT8 khi chưa làm |
+| Định lượng/benchmark — 10% | Có kết quả test, baseline head-only, export parity, đối chiếu cùng input trên Pi; xem báo cáo thực nghiệm 20/10 | Bổ sung dataset độc lập và benchmark camera dài hạn/đối sánh CPU cùng thiết bị |
 | Live demo/trực quan hóa — 10% | Telegram điều khiển/phản hồi; auto-stop; MQTT Explorer; telemetry/reconnect | Tổng duyệt với các thành viên, người lạ đồng ý tham gia và điều kiện mạng demo |
 | Báo cáo/trình bày/phản biện — 40% | Tài liệu phương pháp, code module, sơ đồ và nguồn tham khảo | Biên soạn báo cáo cuối với số liệu mới, phân công thực tế và luyện giải thích; slide làm sau |
 

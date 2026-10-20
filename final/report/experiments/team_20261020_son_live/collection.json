@@ -1,0 +1,19 @@
+{
+  "device_id": "raspberrypi-01",
+  "timestamp": "2026-10-20T14:13:50.628774+00:00",
+  "event": "completed",
+  "request_id": "c08f0ea6-f2af-47b9-a90d-cb961909357c",
+  "person": "son",
+  "session_id": "b86354bcfd8a4a6b95f178a87319bfcd",
+  "captured": 150,
+  "target": 150,
+  "rejected": 767,
+  "rejections": {
+    "sample_interval": 277,
+    "duplicate": 406,
+    "no_face": 79,
+    "blur": 4,
+    "face_too_small": 1
+  },
+  "storage": "dataset/raw/son/b86354bcfd8a4a6b95f178a87319bfcd"
+}

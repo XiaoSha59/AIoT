@@ -1,0 +1,11 @@
+{
+  "source_session": "dataset/raw/son/b86354bcfd8a4a6b95f178a87319bfcd",
+  "source_images": 150,
+  "swap_red_blue": true,
+  "counts": {
+    "train": 78,
+    "purged": 27,
+    "val": 19,
+    "test": 26
+  }
+}

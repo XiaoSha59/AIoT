@@ -1,6 +1,6 @@
 # EdgeFace — Kiến trúc MVP
 
-**Mục tiêu hiện tại:** nhận diện `son` hoặc `Unknown` trực tiếp trên Raspberry Pi, điều khiển và nhận kết quả qua Telegram. Chưa bật âm thanh; thu thập ảnh qua Telegram để sau MVP.
+**Mục tiêu hiện tại:** nhận diện Dung, Hùng, Nguyễn Hồ Trường Sơn, Thanh, Tuấn hoặc `Unknown` trực tiếp trên Raspberry Pi, điều khiển và nhận kết quả qua Telegram. Chưa bật âm thanh; đã chạy thu thập 150 ảnh Sơn bằng camera Pi qua MQTT.
 
 ```mermaid
 flowchart LR
@@ -12,6 +12,7 @@ flowchart LR
     Detector --> Model[MobileNetV3-Small · ONNX Runtime CPU]
     Model --> Pi
     Pi -->|Metadata kết quả| Broker
+    Pi -->|JPEG có bbox qua HTTP trong Tailscale| Bot
 ```
 
 ## Phân công giữa laptop và Pi
@@ -25,24 +26,26 @@ flowchart LR
 
 MQTT chỉ truyền JSON: command, status, result, telemetry và collection. **Không truyền video/frame và không suy luận trên laptop trong lúc demo.**
 
+Khi nhận diện known, bot gửi tin nhắn kết quả và một ảnh thành **hai tin riêng** về chat đã `/start`. Pi vẽ bbox, tên tiếng Việt và confidence trên đúng frame nhận diện; bot tải JPEG qua HTTP/Tailscale có token, không qua MQTT. Cache ảnh chỉ ở RAM Pi và tự hết hạn sau 120 giây. Unknown không gửi chữ/ảnh; camera auto-stop như trước. [Chi tiết](PHOTO_NOTIFICATIONS.md).
+
 ## Luồng dữ liệu và model
 
 `Video thành viên → YuNet crop mặt → lọc chất lượng/trùng lặp → chia tập → fine-tune → chọn threshold → kiểm tra ONNX → deploy Pi`.
 
-- Model hiện tại train tiếp từ checkpoint trước với hai video `dataset/videos/son/1.mp4` và `2.mp4`; video mới đóng góp 338 crop hợp lệ. Unknown lấy ảnh thật từ LFW công khai, lưu nguồn và checksum; danh tính Unknown được tách riêng giữa train/validation/test.
-- Hai video thành viên được chia theo đoạn thời gian có khoảng bỏ trống. Train/validation/test vẫn dùng chung nguồn quay nên chưa chứng minh độ chính xác ở phiên mới. [Phương pháp và giới hạn đánh giá](../report/ARCHITECTURE_AND_METHODS.md).
+- Model hiện tại fine-tune tiếp từ bản team ImageNet với 6 video của 5 thành viên và ảnh camera Sơn, classifier 6 lớp; release `5010dc47644c`. Unknown lấy ảnh thật từ 60 danh tính LFW công khai, lưu nguồn/checksum và tách riêng danh tính giữa train/validation/test.
+- Video điện thoại được xoay đúng hướng trước khi detect/crop. Các tập thành viên chia theo đoạn thời gian có khoảng bỏ trống; vẫn dùng chung nguồn quay nên chưa chứng minh độ chính xác ở phiên mới. [Kết quả và giới hạn đánh giá](../report/TEAM_TRAINING_20261020.md).
 - Model xuất kèm `classes.json`, `preprocessing.json` và `threshold.json`. Pi dùng cùng preprocessing với training; dự đoán lớp Unknown hoặc confidence thấp hơn threshold sẽ trả `Unknown`.
 
 ## Điều khiển và triển khai
 
-- Lệnh MVP: `/start`, `/stop`, `/status`, `/members`, `/help`. `/start` hiển thị “Đang nhận diện...”; thành viên thì gửi kết quả và tự stop, Unknown không gửi tin nhắn và tiếp tục. Mapping `son` → `Nguyễn Hồ Trường Sơn` nằm trong config.
+- Lệnh MVP: `/start`, `/stop`, `/status`, `/members`, `/help`. `/start` hiển thị “Đang nhận diện...”; thành viên thì gửi kết quả và tự stop, Unknown không gửi tin nhắn và tiếp tục. Tên hiển thị của 5 thành viên nằm trong `configs/display_names.json`.
 - Laptop: Docker Compose chạy Mosquitto, bot và MQTT Explorer để xem topic trực tiếp trên trình duyệt. Pi: Python native, ONNX Runtime CPU; triển khai bằng SSH và systemd.
-- Pi đã cấu hình IP tĩnh **`10.220.139.249/24`** trên Wi-Fi hiện tại, giữ profile DHCP gốc để khôi phục. Đổi mạng có thể phải chỉnh IP/gateway.
+- Pi dùng DHCP trên Wi-Fi; profile IP tĩnh cũ đã tắt autoconnect. Truy cập bằng IP Tailscale để không phụ thuộc địa chỉ LAN của từng mạng.
 - Tailscale native tự chạy trên WSL/Pi: WSL `100.73.104.13`, Pi `100.83.132.53`. Pi kết nối WSL:1883 qua VPN; Tailscale Serve chuyển TCP vào broker loopback. SSH tunnel cũ đã tắt. Windows có tác vụ tự mở và giữ WSL khi đăng nhập.
 - Secrets nằm trong `.env`, không đưa vào Git. Theo lựa chọn MVP, hai allowlist Telegram để trống; bot nhận lệnh từ mọi chat và gửi kết quả về chat đã kích hoạt nhận diện.
 
 ## Trạng thái và việc tiếp theo
 
-Đã xác minh SSH, IP tĩnh, camera, dữ liệu crop/chia tập, training GPU, kiểm tra ONNX và deploy Pi. Kiểm thử MQTT camera/inference/start/stop qua Tailscale đã chạy thật; người dùng đã xác nhận Telegram hoạt động. UI MQTT Explorer nhận status/telemetry. Đánh giá và benchmark phiên bản cả team sẽ thực hiện sau khi có đủ dữ liệu. Chi tiết kết nối: [TAILSCALE.md](TAILSCALE.md).
+Đã train và đánh giá classifier 5 thành viên + Unknown, kiểm tra PyTorch/ONNX và đối chiếu 181 crop test trên Pi, kích hoạt release mới, sửa RGB/BGR khi camera USB trả MJPEG, kiểm tra camera thật và MQTT members/status. Bot đã cập nhật tên hiển thị; logic Unknown im lặng và auto-stop giữ nguyên. Đánh giá phiên quay độc lập và benchmark camera dài hạn còn cần bổ sung. Chi tiết kết nối: [TAILSCALE.md](TAILSCALE.md).
 
-**Giới hạn:** chưa có liveness detection; ảnh in/màn hình có thể đánh lừa hệ thống. Ảnh Unknown trên mạng khác điều kiện camera thực tế; cần test thêm với người lạ đồng ý tham gia và video thành viên ở phiên độc lập. Việc dùng video laptop trong MVP cũng chưa đáp ứng yêu cầu môn học về dữ liệu thu từ camera IoT; giai đoạn sau cần bổ sung dữ liệu Pi.
+**Giới hạn:** chưa có liveness detection; ảnh in/màn hình có thể đánh lừa hệ thống. Ảnh Unknown trên mạng khác điều kiện camera thực tế; cần test thêm với người lạ đồng ý tham gia và video thành viên ở phiên độc lập. Đã bổ sung dữ liệu IoT camera của Sơn; các thành viên khác vẫn cần các phiên Pi và test độc lập. [Chi tiết cập nhật camera](../report/SON_CAMERA_UPDATE_20261020.md).

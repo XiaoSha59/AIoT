@@ -1,0 +1,9 @@
+{
+  "python": "3.12.14",
+  "torch": "2.14.0+cu130",
+  "torchvision": "0.29.0+cu130",
+  "opencv": "4.11.0",
+  "onnxruntime": "1.20.1",
+  "numpy": "1.26.4",
+  "pillow": "11.3.0"
+}

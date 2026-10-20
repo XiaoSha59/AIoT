@@ -8,7 +8,7 @@ from PIL import Image
 from torch.utils.data import Dataset
 from torchvision import transforms
 
-from edgeface.preprocess import tensor_from_rgb
+from edgeface.preprocess import PREPROCESS, tensor_from_rgb
 
 
 class FaceDataset(Dataset):
@@ -31,6 +31,9 @@ class FaceDataset(Dataset):
         with Image.open(self.root / row["file"]) as source:
             image = source.convert("RGB")
             if self.augment:
+                # Phone face crops can exceed 4 MP. Spatial augmentation at model
+                # resolution avoids expensive full-resolution PIL operations.
+                image = image.resize(tuple(PREPROCESS["size"]), Image.Resampling.BILINEAR)
                 image = self.augment(image)
             tensor = torch.from_numpy(tensor_from_rgb(image)[0])
         return tensor, self.classes.index(row["person"])

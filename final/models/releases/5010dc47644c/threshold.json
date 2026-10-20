@@ -1,0 +1,919 @@
+{
+  "source": "validation",
+  "threshold": 0.5833254400273035,
+  "max_validation_far": 0.05,
+  "selected_validation_metrics": {
+    "threshold": 0.5833254400273035,
+    "known_member_accuracy": 1.0,
+    "false_acceptance_rate": 0.0,
+    "balanced_known_unknown_accuracy": 1.0
+  },
+  "validation_samples": 173,
+  "selection_rule": "Maximize balanced known/unknown accuracy subject to validation FAR; ties prefer known accuracy then conservative midpoint",
+  "chance_floor": 0.16666666666666666,
+  "candidates": [
+    {
+      "threshold": 0.16666666666666666,
+      "known_member_accuracy": 1.0,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 1.0
+    },
+    {
+      "threshold": 1.0,
+      "known_member_accuracy": 0.0,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.5
+    },
+    {
+      "threshold": 0.5833254400273035,
+      "known_member_accuracy": 1.0,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 1.0
+    },
+    {
+      "threshold": 0.9999851484634426,
+      "known_member_accuracy": 0.9931972789115646,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.9965986394557823
+    },
+    {
+      "threshold": 0.9999924575586376,
+      "known_member_accuracy": 0.9863945578231292,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.9931972789115646
+    },
+    {
+      "threshold": 0.9999988781567064,
+      "known_member_accuracy": 0.9795918367346939,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.9897959183673469
+    },
+    {
+      "threshold": 0.9999990242587107,
+      "known_member_accuracy": 0.9727891156462585,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.9863945578231292
+    },
+    {
+      "threshold": 0.9999992385275659,
+      "known_member_accuracy": 0.9659863945578231,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.9829931972789115
+    },
+    {
+      "threshold": 0.9999993868546599,
+      "known_member_accuracy": 0.9591836734693877,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.9795918367346939
+    },
+    {
+      "threshold": 0.9999994842704327,
+      "known_member_accuracy": 0.9523809523809523,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.9761904761904762
+    },
+    {
+      "threshold": 0.9999995524614822,
+      "known_member_accuracy": 0.9455782312925171,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.9727891156462585
+    },
+    {
+      "threshold": 0.9999995754144083,
+      "known_member_accuracy": 0.9387755102040817,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.9693877551020409
+    },
+    {
+      "threshold": 0.9999995976822693,
+      "known_member_accuracy": 0.9319727891156463,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.9659863945578231
+    },
+    {
+      "threshold": 0.9999996560695927,
+      "known_member_accuracy": 0.9251700680272109,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.9625850340136055
+    },
+    {
+      "threshold": 0.9999997196958897,
+      "known_member_accuracy": 0.9183673469387755,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.9591836734693877
+    },
+    {
+      "threshold": 0.9999997571947308,
+      "known_member_accuracy": 0.9115646258503401,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.9557823129251701
+    },
+    {
+      "threshold": 0.9999998012724385,
+      "known_member_accuracy": 0.9047619047619048,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.9523809523809523
+    },
+    {
+      "threshold": 0.9999998242102914,
+      "known_member_accuracy": 0.8979591836734694,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.9489795918367347
+    },
+    {
+      "threshold": 0.9999998419721826,
+      "known_member_accuracy": 0.891156462585034,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.945578231292517
+    },
+    {
+      "threshold": 0.9999998563434866,
+      "known_member_accuracy": 0.8843537414965986,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.9421768707482994
+    },
+    {
+      "threshold": 0.9999998670919763,
+      "known_member_accuracy": 0.8775510204081632,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.9387755102040816
+    },
+    {
+      "threshold": 0.9999998800951291,
+      "known_member_accuracy": 0.8707482993197279,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.935374149659864
+    },
+    {
+      "threshold": 0.9999998874983009,
+      "known_member_accuracy": 0.8639455782312925,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.9319727891156462
+    },
+    {
+      "threshold": 0.999999912138902,
+      "known_member_accuracy": 0.8571428571428571,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.9285714285714286
+    },
+    {
+      "threshold": 0.9999999408724412,
+      "known_member_accuracy": 0.8503401360544217,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.9251700680272108
+    },
+    {
+      "threshold": 0.9999999472928208,
+      "known_member_accuracy": 0.8435374149659864,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.9217687074829932
+    },
+    {
+      "threshold": 0.9999999496370464,
+      "known_member_accuracy": 0.8367346938775511,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.9183673469387755
+    },
+    {
+      "threshold": 0.9999999516084512,
+      "known_member_accuracy": 0.8299319727891157,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.9149659863945578
+    },
+    {
+      "threshold": 0.9999999540773474,
+      "known_member_accuracy": 0.8231292517006803,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.9115646258503401
+    },
+    {
+      "threshold": 0.9999999558165555,
+      "known_member_accuracy": 0.8163265306122449,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.9081632653061225
+    },
+    {
+      "threshold": 0.9999999561108481,
+      "known_member_accuracy": 0.8095238095238095,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.9047619047619048
+    },
+    {
+      "threshold": 0.9999999609355992,
+      "known_member_accuracy": 0.8027210884353742,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.9013605442176871
+    },
+    {
+      "threshold": 0.9999999664033219,
+      "known_member_accuracy": 0.7959183673469388,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.8979591836734694
+    },
+    {
+      "threshold": 0.9999999685403747,
+      "known_member_accuracy": 0.7891156462585034,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.8945578231292517
+    },
+    {
+      "threshold": 0.99999996996201,
+      "known_member_accuracy": 0.782312925170068,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.891156462585034
+    },
+    {
+      "threshold": 0.9999999730891433,
+      "known_member_accuracy": 0.7755102040816326,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.8877551020408163
+    },
+    {
+      "threshold": 0.9999999784056789,
+      "known_member_accuracy": 0.7687074829931972,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.8843537414965986
+    },
+    {
+      "threshold": 0.9999999814863874,
+      "known_member_accuracy": 0.7619047619047619,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.8809523809523809
+    },
+    {
+      "threshold": 0.9999999827264916,
+      "known_member_accuracy": 0.7551020408163265,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.8775510204081632
+    },
+    {
+      "threshold": 0.9999999836100502,
+      "known_member_accuracy": 0.7482993197278912,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.8741496598639455
+    },
+    {
+      "threshold": 0.9999999844680488,
+      "known_member_accuracy": 0.7414965986394558,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.870748299319728
+    },
+    {
+      "threshold": 0.9999999849911297,
+      "known_member_accuracy": 0.7346938775510204,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.8673469387755102
+    },
+    {
+      "threshold": 0.9999999859812247,
+      "known_member_accuracy": 0.7278911564625851,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.8639455782312926
+    },
+    {
+      "threshold": 0.9999999875739845,
+      "known_member_accuracy": 0.7210884353741497,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.8605442176870748
+    },
+    {
+      "threshold": 0.9999999886979309,
+      "known_member_accuracy": 0.7142857142857143,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.8571428571428572
+    },
+    {
+      "threshold": 0.9999999898056198,
+      "known_member_accuracy": 0.7074829931972789,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.8537414965986394
+    },
+    {
+      "threshold": 0.9999999908332708,
+      "known_member_accuracy": 0.7006802721088435,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.8503401360544218
+    },
+    {
+      "threshold": 0.9999999913273148,
+      "known_member_accuracy": 0.6938775510204082,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.846938775510204
+    },
+    {
+      "threshold": 0.9999999921157643,
+      "known_member_accuracy": 0.6870748299319728,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.8435374149659864
+    },
+    {
+      "threshold": 0.9999999930868531,
+      "known_member_accuracy": 0.6802721088435374,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.8401360544217686
+    },
+    {
+      "threshold": 0.9999999935649899,
+      "known_member_accuracy": 0.673469387755102,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.8367346938775511
+    },
+    {
+      "threshold": 0.9999999943969528,
+      "known_member_accuracy": 0.6666666666666666,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.8333333333333333
+    },
+    {
+      "threshold": 0.9999999953099745,
+      "known_member_accuracy": 0.6598639455782312,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.8299319727891157
+    },
+    {
+      "threshold": 0.9999999955293849,
+      "known_member_accuracy": 0.6530612244897959,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.8265306122448979
+    },
+    {
+      "threshold": 0.9999999958706451,
+      "known_member_accuracy": 0.6462585034013606,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.8231292517006803
+    },
+    {
+      "threshold": 0.999999996248364,
+      "known_member_accuracy": 0.6394557823129252,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.8197278911564626
+    },
+    {
+      "threshold": 0.9999999963138592,
+      "known_member_accuracy": 0.6326530612244898,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.8163265306122449
+    },
+    {
+      "threshold": 0.9999999966009545,
+      "known_member_accuracy": 0.6258503401360545,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.8129251700680272
+    },
+    {
+      "threshold": 0.999999996889201,
+      "known_member_accuracy": 0.6190476190476191,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.8095238095238095
+    },
+    {
+      "threshold": 0.9999999969479934,
+      "known_member_accuracy": 0.6122448979591837,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.8061224489795918
+    },
+    {
+      "threshold": 0.9999999971493416,
+      "known_member_accuracy": 0.6054421768707483,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.8027210884353742
+    },
+    {
+      "threshold": 0.99999999748108,
+      "known_member_accuracy": 0.5986394557823129,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.7993197278911565
+    },
+    {
+      "threshold": 0.9999999977087314,
+      "known_member_accuracy": 0.5918367346938775,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.7959183673469388
+    },
+    {
+      "threshold": 0.9999999977907965,
+      "known_member_accuracy": 0.5850340136054422,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.7925170068027211
+    },
+    {
+      "threshold": 0.9999999978154894,
+      "known_member_accuracy": 0.5782312925170068,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.7891156462585034
+    },
+    {
+      "threshold": 0.9999999978884866,
+      "known_member_accuracy": 0.5714285714285714,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.7857142857142857
+    },
+    {
+      "threshold": 0.9999999980242095,
+      "known_member_accuracy": 0.564625850340136,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.782312925170068
+    },
+    {
+      "threshold": 0.9999999981530241,
+      "known_member_accuracy": 0.5578231292517006,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.7789115646258503
+    },
+    {
+      "threshold": 0.9999999982819932,
+      "known_member_accuracy": 0.5510204081632653,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.7755102040816326
+    },
+    {
+      "threshold": 0.9999999984852981,
+      "known_member_accuracy": 0.54421768707483,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.772108843537415
+    },
+    {
+      "threshold": 0.9999999986938999,
+      "known_member_accuracy": 0.5374149659863946,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.7687074829931972
+    },
+    {
+      "threshold": 0.9999999987941522,
+      "known_member_accuracy": 0.5306122448979592,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.7653061224489797
+    },
+    {
+      "threshold": 0.9999999988533836,
+      "known_member_accuracy": 0.5238095238095238,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.7619047619047619
+    },
+    {
+      "threshold": 0.999999999034682,
+      "known_member_accuracy": 0.5170068027210885,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.7585034013605443
+    },
+    {
+      "threshold": 0.9999999991879992,
+      "known_member_accuracy": 0.5102040816326531,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.7551020408163265
+    },
+    {
+      "threshold": 0.999999999193941,
+      "known_member_accuracy": 0.5034013605442177,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.7517006802721089
+    },
+    {
+      "threshold": 0.9999999992011877,
+      "known_member_accuracy": 0.4965986394557823,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.7482993197278911
+    },
+    {
+      "threshold": 0.99999999923469,
+      "known_member_accuracy": 0.4897959183673469,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.7448979591836735
+    },
+    {
+      "threshold": 0.9999999992665872,
+      "known_member_accuracy": 0.48299319727891155,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.7414965986394557
+    },
+    {
+      "threshold": 0.999999999269527,
+      "known_member_accuracy": 0.47619047619047616,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.7380952380952381
+    },
+    {
+      "threshold": 0.9999999992745845,
+      "known_member_accuracy": 0.46938775510204084,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.7346938775510204
+    },
+    {
+      "threshold": 0.9999999992968689,
+      "known_member_accuracy": 0.46258503401360546,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.7312925170068028
+    },
+    {
+      "threshold": 0.9999999993340006,
+      "known_member_accuracy": 0.4557823129251701,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.7278911564625851
+    },
+    {
+      "threshold": 0.9999999993708212,
+      "known_member_accuracy": 0.4489795918367347,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.7244897959183674
+    },
+    {
+      "threshold": 0.999999999390913,
+      "known_member_accuracy": 0.4421768707482993,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.7210884353741497
+    },
+    {
+      "threshold": 0.999999999394431,
+      "known_member_accuracy": 0.43537414965986393,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.717687074829932
+    },
+    {
+      "threshold": 0.9999999994088686,
+      "known_member_accuracy": 0.42857142857142855,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.7142857142857143
+    },
+    {
+      "threshold": 0.9999999994288092,
+      "known_member_accuracy": 0.4217687074829932,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.7108843537414966
+    },
+    {
+      "threshold": 0.9999999994476511,
+      "known_member_accuracy": 0.41496598639455784,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.7074829931972789
+    },
+    {
+      "threshold": 0.9999999994726757,
+      "known_member_accuracy": 0.40816326530612246,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.7040816326530612
+    },
+    {
+      "threshold": 0.9999999994862262,
+      "known_member_accuracy": 0.4013605442176871,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.7006802721088435
+    },
+    {
+      "threshold": 0.9999999995047257,
+      "known_member_accuracy": 0.3945578231292517,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.6972789115646258
+    },
+    {
+      "threshold": 0.9999999995580341,
+      "known_member_accuracy": 0.3877551020408163,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.6938775510204082
+    },
+    {
+      "threshold": 0.9999999996150304,
+      "known_member_accuracy": 0.38095238095238093,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.6904761904761905
+    },
+    {
+      "threshold": 0.999999999655114,
+      "known_member_accuracy": 0.3741496598639456,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.6870748299319728
+    },
+    {
+      "threshold": 0.9999999996775587,
+      "known_member_accuracy": 0.3673469387755102,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.6836734693877551
+    },
+    {
+      "threshold": 0.9999999996927496,
+      "known_member_accuracy": 0.36054421768707484,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.6802721088435374
+    },
+    {
+      "threshold": 0.9999999997120819,
+      "known_member_accuracy": 0.35374149659863946,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.6768707482993197
+    },
+    {
+      "threshold": 0.9999999997225583,
+      "known_member_accuracy": 0.3469387755102041,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.673469387755102
+    },
+    {
+      "threshold": 0.9999999997369717,
+      "known_member_accuracy": 0.3401360544217687,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.6700680272108843
+    },
+    {
+      "threshold": 0.9999999997550458,
+      "known_member_accuracy": 0.3333333333333333,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.6666666666666666
+    },
+    {
+      "threshold": 0.9999999997718465,
+      "known_member_accuracy": 0.32653061224489793,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.6632653061224489
+    },
+    {
+      "threshold": 0.9999999997826025,
+      "known_member_accuracy": 0.3197278911564626,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.6598639455782314
+    },
+    {
+      "threshold": 0.9999999997839366,
+      "known_member_accuracy": 0.3129251700680272,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.6564625850340136
+    },
+    {
+      "threshold": 0.9999999997916217,
+      "known_member_accuracy": 0.30612244897959184,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.653061224489796
+    },
+    {
+      "threshold": 0.9999999998075335,
+      "known_member_accuracy": 0.29931972789115646,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.6496598639455782
+    },
+    {
+      "threshold": 0.9999999998170718,
+      "known_member_accuracy": 0.2925170068027211,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.6462585034013606
+    },
+    {
+      "threshold": 0.9999999998221655,
+      "known_member_accuracy": 0.2857142857142857,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.6428571428571428
+    },
+    {
+      "threshold": 0.9999999998288853,
+      "known_member_accuracy": 0.2789115646258503,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.6394557823129252
+    },
+    {
+      "threshold": 0.9999999998419028,
+      "known_member_accuracy": 0.272108843537415,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.6360544217687075
+    },
+    {
+      "threshold": 0.9999999998553527,
+      "known_member_accuracy": 0.2653061224489796,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.6326530612244898
+    },
+    {
+      "threshold": 0.999999999859537,
+      "known_member_accuracy": 0.2585034013605442,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.6292517006802721
+    },
+    {
+      "threshold": 0.999999999863683,
+      "known_member_accuracy": 0.25170068027210885,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.6258503401360545
+    },
+    {
+      "threshold": 0.9999999998801276,
+      "known_member_accuracy": 0.24489795918367346,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.6224489795918368
+    },
+    {
+      "threshold": 0.9999999998943246,
+      "known_member_accuracy": 0.23809523809523808,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.6190476190476191
+    },
+    {
+      "threshold": 0.9999999999010807,
+      "known_member_accuracy": 0.23129251700680273,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.6156462585034014
+    },
+    {
+      "threshold": 0.9999999999093839,
+      "known_member_accuracy": 0.22448979591836735,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.6122448979591837
+    },
+    {
+      "threshold": 0.9999999999134683,
+      "known_member_accuracy": 0.21768707482993196,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.608843537414966
+    },
+    {
+      "threshold": 0.9999999999162694,
+      "known_member_accuracy": 0.2108843537414966,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.6054421768707483
+    },
+    {
+      "threshold": 0.9999999999179265,
+      "known_member_accuracy": 0.20408163265306123,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.6020408163265306
+    },
+    {
+      "threshold": 0.9999999999201576,
+      "known_member_accuracy": 0.19727891156462585,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.5986394557823129
+    },
+    {
+      "threshold": 0.9999999999242636,
+      "known_member_accuracy": 0.19047619047619047,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.5952380952380952
+    },
+    {
+      "threshold": 0.9999999999362083,
+      "known_member_accuracy": 0.1836734693877551,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.5918367346938775
+    },
+    {
+      "threshold": 0.999999999947563,
+      "known_member_accuracy": 0.17687074829931973,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.5884353741496599
+    },
+    {
+      "threshold": 0.9999999999503749,
+      "known_member_accuracy": 0.17006802721088435,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.5850340136054422
+    },
+    {
+      "threshold": 0.9999999999510009,
+      "known_member_accuracy": 0.16326530612244897,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.5816326530612245
+    },
+    {
+      "threshold": 0.9999999999510998,
+      "known_member_accuracy": 0.1564625850340136,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.5782312925170068
+    },
+    {
+      "threshold": 0.9999999999516374,
+      "known_member_accuracy": 0.14965986394557823,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.5748299319727891
+    },
+    {
+      "threshold": 0.9999999999534721,
+      "known_member_accuracy": 0.14285714285714285,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.5714285714285714
+    },
+    {
+      "threshold": 0.9999999999566291,
+      "known_member_accuracy": 0.1360544217687075,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.5680272108843537
+    },
+    {
+      "threshold": 0.999999999961467,
+      "known_member_accuracy": 0.1292517006802721,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.564625850340136
+    },
+    {
+      "threshold": 0.9999999999681524,
+      "known_member_accuracy": 0.12244897959183673,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.5612244897959183
+    },
+    {
+      "threshold": 0.9999999999759434,
+      "known_member_accuracy": 0.11564625850340136,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.5578231292517006
+    },
+    {
+      "threshold": 0.999999999982407,
+      "known_member_accuracy": 0.10884353741496598,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.5544217687074829
+    },
+    {
+      "threshold": 0.9999999999857047,
+      "known_member_accuracy": 0.10204081632653061,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.5510204081632653
+    },
+    {
+      "threshold": 0.9999999999881122,
+      "known_member_accuracy": 0.09523809523809523,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.5476190476190477
+    },
+    {
+      "threshold": 0.9999999999895823,
+      "known_member_accuracy": 0.08843537414965986,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.54421768707483
+    },
+    {
+      "threshold": 0.9999999999915267,
+      "known_member_accuracy": 0.08163265306122448,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.5408163265306123
+    },
+    {
+      "threshold": 0.9999999999938293,
+      "known_member_accuracy": 0.07482993197278912,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.5374149659863946
+    },
+    {
+      "threshold": 0.9999999999947184,
+      "known_member_accuracy": 0.06802721088435375,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.5340136054421769
+    },
+    {
+      "threshold": 0.9999999999952083,
+      "known_member_accuracy": 0.061224489795918366,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.5306122448979592
+    },
+    {
+      "threshold": 0.9999999999955881,
+      "known_member_accuracy": 0.05442176870748299,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.5272108843537415
+    },
+    {
+      "threshold": 0.999999999995985,
+      "known_member_accuracy": 0.047619047619047616,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.5238095238095238
+    },
+    {
+      "threshold": 0.9999999999960917,
+      "known_member_accuracy": 0.04081632653061224,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.5204081632653061
+    },
+    {
+      "threshold": 0.9999999999965208,
+      "known_member_accuracy": 0.034013605442176874,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.5170068027210885
+    },
+    {
+      "threshold": 0.999999999997407,
+      "known_member_accuracy": 0.027210884353741496,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.5136054421768708
+    },
+    {
+      "threshold": 0.9999999999980451,
+      "known_member_accuracy": 0.02040816326530612,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.5102040816326531
+    },
+    {
+      "threshold": 0.9999999999982853,
+      "known_member_accuracy": 0.013605442176870748,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.5068027210884354
+    },
+    {
+      "threshold": 0.9999999999987402,
+      "known_member_accuracy": 0.006802721088435374,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.5034013605442177
+    },
+    {
+      "threshold": 0.9999999999995332,
+      "known_member_accuracy": 0.0,
+      "false_acceptance_rate": 0.0,
+      "balanced_known_unknown_accuracy": 0.5
+    }
+  ],
+  "limitation": "Small validation set; empirical FAR does not establish real-world FAR",
+  "checkpoint_sha256": "af8fcef57f90d4315347b0c0a72c06cc0d25d636ed0c1675e5a305b2015d8175",
+  "manifest_sha256": "e49dc56d80cda94e6f5132d613b972d0db4f8dfd8ea9b987a1dc777a2b2f88dd"
+}

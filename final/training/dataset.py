@@ -99,7 +99,9 @@ def split_dataset(dataset: Path, seed: int, allow_temporal: bool, allow_multi_te
                     raise ValueError("Invalid forced split")
                 row["split"] = row["forced_split"]
                 if len(recordings) > 1:
-                    row["evaluation_protocol"] = "multi_video_purged_temporal"
+                    row["evaluation_protocol"] = ("multi_recording_purged_temporal"
+                        if any(r.get("source") == "pi_camera" for r in members)
+                        else "multi_video_purged_temporal")
         else:
             group_key = "identity" if name == "Unknown" else "source_recording"
             assignments = assign_groups(list({r[group_key] for r in members}), rng)

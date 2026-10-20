@@ -1,6 +1,8 @@
 import asyncio
 import json
 from unittest.mock import AsyncMock
+from dataclasses import replace
+from types import SimpleNamespace
 
 from edgeface.config import Config
 from telegram_bot.bot import Bot
@@ -73,3 +75,83 @@ def test_start_shows_recognizing_status(monkeypatch, tmp_path):
     message = type("Message", (), {"reply_text": AsyncMock()})()
     asyncio.run(b.execute(message, {"action": "start"}))
     message.reply_text.assert_awaited_once_with("Đang nhận diện...")
+
+
+def test_known_sends_separate_text_and_photo_only_to_starting_chat(monkeypatch, tmp_path):
+    b = bot(monkeypatch, tmp_path)
+    b.cfg = replace(b.cfg, recognition_photo_enabled=True)
+    b.recognition_chats["session"] = 123
+    b.subscribers = {123, 999}
+    b.dispatch = AsyncMock(return_value={"ok": True, "state": "idle"})
+    calls = []
+    async def text(chat, text):
+        calls.append(("text", chat, text))
+    async def photo(**kwargs):
+        calls.append(("photo", kwargs["chat_id"], kwargs["photo"]))
+    app = SimpleNamespace(bot=SimpleNamespace(send_message=AsyncMock(side_effect=text), send_photo=AsyncMock(side_effect=photo)))
+    monkeypatch.setattr("telegram_bot.bot.fetch_snapshot", lambda *args: b"jpeg-bytes")
+    value = {"event": "recognition", "request_id": "session", "person": "son", "confidence": .94,
+             "device_id": "test", "inference_ms": 30, "image": {"id": "a"*32}}
+    asyncio.run(b.notify_event(app, "result", value))
+    assert [c[:2] for c in calls] == [("text", 123), ("photo", 123)]
+    assert "Confidence: 94.0%" in calls[0][2]
+    assert b.dispatch.call_args.args[0]["expected_request_id"] == "session"
+
+
+def test_photo_download_failure_preserves_text_and_auto_stop(monkeypatch, tmp_path):
+    b = bot(monkeypatch, tmp_path)
+    b.cfg = replace(b.cfg, recognition_photo_enabled=True)
+    b.recognition_chats["session"] = 123
+    b.dispatch = AsyncMock(return_value={"ok": True, "state": "idle"})
+    app = SimpleNamespace(bot=SimpleNamespace(send_message=AsyncMock(), send_photo=AsyncMock()))
+    def unavailable(*args):
+        raise TimeoutError("simulated HTTP timeout")
+    monkeypatch.setattr("telegram_bot.bot.fetch_snapshot", unavailable)
+    value = {"event": "recognition", "request_id": "session", "person": "son", "confidence": .94,
+             "device_id": "test", "inference_ms": 30, "image": {"id": "a"*32}}
+    asyncio.run(b.notify_event(app, "result", value))
+    assert app.bot.send_message.await_count == 2
+    assert "Recognition successful" in app.bot.send_message.call_args_list[0].args[1]
+    app.bot.send_photo.assert_not_called()
+    b.dispatch.assert_awaited_once()
+
+
+def test_unknown_never_downloads_or_sends_photo(monkeypatch, tmp_path):
+    b = bot(monkeypatch, tmp_path)
+    b.cfg = replace(b.cfg, recognition_photo_enabled=True)
+    b.dispatch = AsyncMock()
+    fetch = AsyncMock()
+    monkeypatch.setattr("telegram_bot.bot.fetch_snapshot", fetch)
+    app = SimpleNamespace(bot=SimpleNamespace(send_message=AsyncMock(), send_photo=AsyncMock()))
+    asyncio.run(b.notify_event(app, "result", {"event": "recognition", "person": "Unknown"}))
+    app.bot.send_message.assert_not_called()
+    app.bot.send_photo.assert_not_called()
+    b.dispatch.assert_not_called()
+    fetch.assert_not_called()
+
+
+def test_start_registers_recipient_before_command_can_produce_result(monkeypatch, tmp_path):
+    b = bot(monkeypatch, tmp_path)
+    async def dispatch(command):
+        assert b.recognition_chats[command["request_id"]] == 123
+        return {"ok": True}
+    b.dispatch = dispatch
+    message = SimpleNamespace(chat_id=123, reply_text=AsyncMock())
+    asyncio.run(b.execute(message, {"action": "start", "request_id": "session"}))
+
+
+def test_telegram_photo_failure_keeps_success_text_and_reports_delivery_problem(monkeypatch, tmp_path):
+    from telegram.error import TelegramError
+    b = bot(monkeypatch, tmp_path)
+    b.cfg = replace(b.cfg, recognition_photo_enabled=True)
+    b.recognition_chats["session"] = 123
+    b.dispatch = AsyncMock(return_value={"ok": True, "state": "idle"})
+    monkeypatch.setattr("telegram_bot.bot.fetch_snapshot", lambda *args: b"jpeg-bytes")
+    app = SimpleNamespace(bot=SimpleNamespace(send_message=AsyncMock(),
+        send_photo=AsyncMock(side_effect=TelegramError("simulated upload failure"))))
+    value = {"event": "recognition", "request_id": "session", "person": "son", "confidence": .94,
+             "device_id": "test", "inference_ms": 30, "image": {"id": "a"*32}}
+    asyncio.run(b.notify_event(app, "result", value))
+    assert app.bot.send_message.await_count == 2
+    assert "Recognition successful" in app.bot.send_message.call_args_list[0].args[1]
+    assert "Không gửi được ảnh" in app.bot.send_message.call_args_list[1].args[1]
