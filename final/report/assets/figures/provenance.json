@@ -173,5 +173,30 @@
     "best_val_loss": 2.982358796248132e-07,
     "scale": "log",
     "interpolation_or_smoothing": false
+  },
+  "benchmark_figures": {
+    "comparison": {
+      "source": "report/experiments/benchmark_team_20261020/comparison.json",
+      "sha256": "37aa9e59d59036490e023bfce5fd54dce9b555ceb5b2a7dd5e7fb9a03c467bc4"
+    },
+    "replay": {
+      "source": "report/experiments/benchmark_team_20261020/pipeline_replay_opencv4.json",
+      "sha256": "cdade2fb5a7c534610c864bc2b24ae13dc1f36517c90c330b3d0fc6e06759a69"
+    },
+    "confusion_matrix": {
+      "source": "report/experiments/team_20261020_son_live/evaluation_metrics.json",
+      "sha256": "98c6a40f09404d883e03dc1b2111a010a94076c2154e405f945876fc5e67dadf"
+    },
+    "reran_training_or_benchmark": false
+  },
+  "workflow_diagrams": {
+    "type": "implementation_block_diagrams_not_measurements",
+    "sources": {
+      "raspberry_pi/agent.py": "f69dd0a72ca7a4dcb19cf110111493fdedc0976ff7354fb89e63cdbbccd6534b",
+      "telegram_bot/bot.py": "4dc1687a50b70826e74f2992017f79f38ffd7463c0c5b4d8b50d476c309a8bf3",
+      "edgeface/protocol.py": "2339acb582481b6b3080b04a110aabfc75bd39e26de07988ca22580a65c9b1f1",
+      "training/train.py": "ca4f78d74c5c12259506ab544d53eb3636cfec4218fde442961249d5eaa0d9e6",
+      "docker-compose.yml": "ad725fda28db479cbfd38c68e38cb133aed5814ba12d4e985215c60bea0e95f4"
+    }
   }
 }

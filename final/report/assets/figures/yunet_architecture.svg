@@ -374,19 +374,19 @@ L 1084.537287 237.371006
     <text style="font-weight: 700; font-size: 21px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #18324e" x="28.068979" y="44.806034" transform="rotate(-0 28.068979 44.806034)">YuNet — Mô hình phát hiện khuôn mặt</text>
    </g>
    <g id="text_2">
-    <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #58738b" x="28.068979" y="77.648382" transform="rotate(-0 28.068979 77.648382)">Tái dựng từ graph ONNX YuNet 2023mar của EdgeFace • pretrained, không fine-tune</text>
+    <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #58738b" x="28.068979" y="78.294632" transform="rotate(-0 28.068979 78.294632)">Tái dựng từ đồ thị ONNX YuNet 2023mar • mô hình huấn luyện sẵn, giữ nguyên trọng số</text>
    </g>
    <g id="text_3">
-    <text style="font-weight: 700; font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #18324e" x="139.087683" y="113.754718" transform="rotate(-0 139.087683 113.754718)">BACKBONE</text>
+    <text style="font-weight: 700; font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #18324e" x="139.087683" y="113.754718" transform="rotate(-0 139.087683 113.754718)">TRÍCH XUẤT ĐẶC TRƯNG</text>
    </g>
    <g id="text_4">
-    <text style="font-weight: 700; font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #18324e" x="475.725042" y="113.754718" transform="rotate(-0 475.725042 113.754718)">FEATURE PYRAMID</text>
+    <text style="font-weight: 700; font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #18324e" x="475.725042" y="113.754718" transform="rotate(-0 475.725042 113.754718)">HỢP NHẤT ĐA TỈ LỆ</text>
    </g>
    <g id="text_5">
-    <text style="font-weight: 700; font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #18324e" x="883.987371" y="113.754718" transform="rotate(-0 883.987371 113.754718)">DETECTION HEADS</text>
+    <text style="font-weight: 700; font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #18324e" x="883.987371" y="113.754718" transform="rotate(-0 883.987371 113.754718)">CÁC NHÁNH DỰ ĐOÁN</text>
    </g>
    <g id="text_6">
-    <text style="font-size: 10px; font-family: 'DejaVu Sans'; fill: #18324e" transform="translate(86.731431 172.502791)">Ảnh BGR → blob NCHW</text>
+    <text style="font-size: 10px; font-family: 'DejaVu Sans'; fill: #18324e" transform="translate(81.603306 172.502791)">Ảnh BGR → tensor NCHW</text>
     <text style="font-size: 10px; font-family: 'DejaVu Sans'; fill: #18324e" transform="translate(96.905649 185.220291)">1 × 3 × 640 × 640</text>
    </g>
    <g id="text_7">
@@ -412,11 +412,11 @@ L 1084.537287 237.371006
     <text style="font-size: 10px; font-family: 'DejaVu Sans'; fill: #18324e" transform="translate(81.344712 692.365222)">64 × 20 × 20  (stride 32)</text>
    </g>
    <g id="text_12">
-    <text style="font-size: 10px; font-family: 'DejaVu Sans'; fill: #18324e" transform="translate(419.524262 214.360452)">Khối convolution nhẹ</text>
-    <text style="font-size: 10px; font-family: 'DejaVu Sans'; fill: #18324e" transform="translate(422.164106 227.077952)">Pointwise Conv 1×1</text>
-    <text style="font-size: 10px; font-family: 'DejaVu Sans'; fill: #18324e" transform="translate(413.56645 239.795452)">→ Depthwise Conv 3×3</text>
-    <text style="font-size: 10px; font-family: 'DejaVu Sans'; fill: #18324e" transform="translate(453.843794 252.512952)">→ ReLU</text>
-    <text style="font-size: 10px; font-family: 'DejaVu Sans'; fill: #18324e" transform="translate(375.880512 265.790452)">Neck: upsample ×2 và cộng đặc trưng</text>
+    <text style="font-size: 10px; font-family: 'DejaVu Sans'; fill: #18324e" transform="translate(425.643012 214.484671)">Khối tích chập nhẹ</text>
+    <text style="font-size: 10px; font-family: 'DejaVu Sans'; fill: #18324e" transform="translate(422.164106 227.202171)">Pointwise Conv 1×1</text>
+    <text style="font-size: 10px; font-family: 'DejaVu Sans'; fill: #18324e" transform="translate(413.56645 239.919671)">→ Depthwise Conv 3×3</text>
+    <text style="font-size: 10px; font-family: 'DejaVu Sans'; fill: #18324e" transform="translate(453.843794 252.637171)">→ ReLU</text>
+    <text style="font-size: 10px; font-family: 'DejaVu Sans'; fill: #18324e" transform="translate(361.548481 265.914671)">Neck: tăng kích thước ×2 và cộng đặc trưng</text>
    </g>
    <g id="text_13">
     <text style="font-size: 10px; font-family: 'DejaVu Sans'; fill: #18324e" transform="translate(413.517231 465.284217)">P3: PW/DW convolution</text>
@@ -465,15 +465,15 @@ z
     <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #18324e" x="479.30629" y="525.315178" transform="rotate(-0 479.30629 525.315178)">↑ ×2 + C3</text>
    </g>
    <g id="text_21">
-    <text style="font-size: 11px; font-family: 'DejaVu Sans'; fill: #18324e" transform="translate(772.18894 212.038405)">Hậu xử lý OpenCV FaceDetectorYN</text>
-    <text style="font-size: 11px; font-family: 'DejaVu Sans'; fill: #18324e" transform="translate(787.523628 226.027655)">Decode bbox và 5 landmarks</text>
-    <text style="font-size: 11px; font-family: 'DejaVu Sans'; fill: #18324e" transform="translate(766.981128 240.016905)">Score threshold 0,85 • NMS IoU 0,30</text>
-    <text style="font-size: 11px; font-family: 'DejaVu Sans'; fill: #18324e" transform="translate(747.470737 254.006155)">Đầu ra: bbox + landmarks + detector score</text>
-    <text style="font-size: 11px; font-family: 'DejaVu Sans'; fill: #18324e" transform="translate(798.265815 268.611405)">Không dự đoán danh tính</text>
+    <text style="font-size: 11px; font-family: 'DejaVu Sans'; fill: #18324e" transform="translate(772.18894 210.187999)">Hậu xử lý OpenCV FaceDetectorYN</text>
+    <text style="font-size: 11px; font-family: 'DejaVu Sans'; fill: #18324e" transform="translate(772.569643 225.719655)">Giải mã khung mặt và 5 điểm mốc</text>
+    <text style="font-size: 11px; font-family: 'DejaVu Sans'; fill: #18324e" transform="translate(760.712846 240.324905)">Ngưỡng phát hiện 0,85 • NMS IoU 0,30</text>
+    <text style="font-size: 11px; font-family: 'DejaVu Sans'; fill: #18324e" transform="translate(730.89855 255.856562)">Đầu ra: khung mặt + điểm mốc + điểm phát hiện</text>
+    <text style="font-size: 11px; font-family: 'DejaVu Sans'; fill: #18324e" transform="translate(798.265815 270.461812)">Không dự đoán danh tính</text>
    </g>
    <g id="text_22">
-    <text style="font-size: 10px; font-family: 'DejaVu Sans'; fill: #58738b" transform="translate(28.068979 755.837463)">Kích thước đặc trưng minh họa theo graph ONNX 640×640; khi chạy, FaceDetectorYN đặt input theo frame (Pi: 640×480).</text>
-    <text style="font-size: 10px; font-family: 'DejaVu Sans'; fill: #58738b" transform="translate(28.068979 768.059025)">12 output tensors = 4 loại đầu ra × 3 mức stride. Score detector khác confidence danh tính của MobileNetV3.</text>
+    <text style="font-size: 10px; font-family: 'DejaVu Sans'; fill: #58738b" transform="translate(28.068979 755.974963)">Kích thước đặc trưng ứng với đầu vào tham chiếu 640×640; khi chạy trên Pi: khung hình 640×480.</text>
+    <text style="font-size: 10px; font-family: 'DejaVu Sans'; fill: #58738b" transform="translate(28.068979 768.37465)">12 tensor đầu ra = 4 loại × 3 mức stride. Điểm phát hiện khác độ tin cậy phân loại danh tính.</text>
    </g>
   </g>
  </g>

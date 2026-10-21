@@ -314,11 +314,11 @@ z
     <text style="font-weight: 700; font-size: 21px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #18324e" x="28.068979" y="44.830279" transform="rotate(-0 28.068979 44.830279)">MobileNetV3-Small — Bộ phân loại thành viên EdgeFace</text>
    </g>
    <g id="text_2">
-    <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #58738b" x="28.068979" y="78.098828" transform="rotate(-0 28.068979 78.098828)">ImageNet pretrained → fine-tune sáu lớp • 1.524.006 tham số • ONNX FP32 / batch 1</text>
+    <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #58738b" x="28.068979" y="78.098828" transform="rotate(-0 28.068979 78.098828)">Khởi tạo từ ImageNet, tinh chỉnh sáu lớp • 1.524.006 tham số • ONNX FP32, batch = 1</text>
    </g>
    <g id="text_3">
-    <text style="font-size: 10px; font-family: 'DejaVu Sans'; fill: #18324e" transform="translate(239.479009 119.506895)">Input  |  Face crop RGB đã normalize</text>
-    <text style="font-size: 10px; font-family: 'DejaVu Sans'; fill: #18324e" transform="translate(263.041509 132.50252)">Đầu ra: 1 × 3 × 224 × 224</text>
+    <text style="font-size: 10px; font-family: 'DejaVu Sans'; fill: #18324e" transform="translate(237.633696 119.92252)">Input  |  Vùng mặt RGB đã chuẩn hóa</text>
+    <text style="font-size: 10px; font-family: 'DejaVu Sans'; fill: #18324e" transform="translate(263.041509 132.918145)">Đầu ra: 1 × 3 × 224 × 224</text>
    </g>
    <g id="text_4">
     <text style="font-size: 10px; font-family: 'DejaVu Sans'; fill: #18324e" transform="translate(203.839165 189.53691)">features.0  |  Stem Conv 3×3, s=2 + BN + h-swish</text>
@@ -364,27 +364,27 @@ z
     <text style="font-size: 11px; font-family: 'DejaVu Sans'; fill: #18324e" transform="translate(771.730572 207.641823)">Skip nếu s=1 và số kênh đầu vào = đầu ra</text>
    </g>
    <g id="text_14">
-    <text style="font-size: 11px; font-family: 'DejaVu Sans'; fill: #18324e" transform="translate(796.430728 341.567269)">SE: điều chỉnh trọng số theo kênh</text>
-    <text style="font-size: 11px; font-family: 'DejaVu Sans'; fill: #18324e" transform="translate(803.842837 357.387675)">DW: mỗi kênh một spatial filter</text>
-    <text style="font-size: 11px; font-family: 'DejaVu Sans'; fill: #18324e" transform="translate(789.926978 372.690738)">PW 1×1: kết hợp thông tin các kênh</text>
-    <text style="font-size: 11px; font-family: 'DejaVu Sans'; fill: #18324e" transform="translate(794.196353 386.679988)">BN: BatchNorm, k: kernel, s: stride</text>
+    <text style="font-size: 11px; font-family: 'DejaVu Sans'; fill: #18324e" transform="translate(796.430728 342.174847)">SE: điều chỉnh trọng số theo kênh</text>
+    <text style="font-size: 11px; font-family: 'DejaVu Sans'; fill: #18324e" transform="translate(773.35565 356.780097)">DW: tích chập không gian riêng từng kênh</text>
+    <text style="font-size: 11px; font-family: 'DejaVu Sans'; fill: #18324e" transform="translate(789.926978 372.08316)">PW 1×1: kết hợp thông tin các kênh</text>
+    <text style="font-size: 11px; font-family: 'DejaVu Sans'; fill: #18324e" transform="translate(794.196353 386.07241)">BN: BatchNorm, k: kernel, s: stride</text>
    </g>
    <g id="text_15">
-    <text style="font-size: 11px; font-family: 'DejaVu Sans'; fill: #18324e" transform="translate(819.285806 515.072571)">Fine-tune trong EdgeFace</text>
-    <text style="font-size: 11px; font-family: 'DejaVu Sans'; fill: #18324e" transform="translate(820.2844 529.834227)">Head stage: chỉ classifier</text>
-    <text style="font-size: 11px; font-family: 'DejaVu Sans'; fill: #18324e" transform="translate(765.528462 543.823477)">Fine stage: features.10 / .11 / .12 + classifier</text>
-    <text style="font-size: 11px; font-family: 'DejaVu Sans'; fill: #18324e" transform="translate(762.069478 559.12654)">BatchNorm running statistics được giữ cố định</text>
+    <text style="font-size: 11px; font-family: 'DejaVu Sans'; fill: #18324e" transform="translate(816.500572 515.077727)">Tinh chỉnh trong EdgeFace</text>
+    <text style="font-size: 11px; font-family: 'DejaVu Sans'; fill: #18324e" transform="translate(780.975728 530.38079)">Giai đoạn đầu: chỉ huấn luyện classifier</text>
+    <text style="font-size: 11px; font-family: 'DejaVu Sans'; fill: #18324e" transform="translate(756.088228 544.37004)">Giai đoạn sau: features.10 / .11 / .12 + classifier</text>
+    <text style="font-size: 11px; font-family: 'DejaVu Sans'; fill: #18324e" transform="translate(772.997291 559.673102)">Giữ cố định thống kê trượt của BatchNorm</text>
    </g>
    <g id="text_16">
-    <text style="font-size: 11px; font-family: 'DejaVu Sans'; fill: #18324e" transform="translate(810.435103 716.908886)">Hậu xử lý ngoài graph ONNX</text>
-    <text style="font-size: 11px; font-family: 'DejaVu Sans'; fill: #18324e" transform="translate(814.57815 730.898136)">Softmax → max confidence</text>
-    <text style="font-size: 11px; font-family: 'DejaVu Sans'; fill: #18324e" transform="translate(795.332447 746.201198)">Unknown nếu argmax = Unknown</text>
-    <text style="font-size: 11px; font-family: 'DejaVu Sans'; fill: #18324e" transform="translate(802.909556 760.190448)">hoặc confidence &lt; 0,58332544</text>
-    <text style="font-size: 11px; font-family: 'DejaVu Sans'; fill: #18324e" transform="translate(779.397056 774.795698)">Còn lại: dung / hung / son / thanh / tuan</text>
-    <text style="font-size: 11px; font-family: 'DejaVu Sans'; fill: #18324e" transform="translate(804.834556 790.560761)">Dropout tắt ở chế độ inference</text>
+    <text style="font-size: 11px; font-family: 'DejaVu Sans'; fill: #18324e" transform="translate(810.760806 716.137339)">Hậu xử lý ngoài đồ thị ONNX</text>
+    <text style="font-size: 11px; font-family: 'DejaVu Sans'; fill: #18324e" transform="translate(806.872994 731.440401)">Softmax → độ tin cậy lớn nhất</text>
+    <text style="font-size: 11px; font-family: 'DejaVu Sans'; fill: #18324e" transform="translate(795.332447 746.743464)">Unknown nếu argmax = Unknown</text>
+    <text style="font-size: 11px; font-family: 'DejaVu Sans'; fill: #18324e" transform="translate(805.846041 761.348714)">hoặc độ tin cậy &lt; 0,58332544</text>
+    <text style="font-size: 11px; font-family: 'DejaVu Sans'; fill: #18324e" transform="translate(779.397056 775.953964)">Còn lại: dung / hung / son / thanh / tuan</text>
+    <text style="font-size: 11px; font-family: 'DejaVu Sans'; fill: #18324e" transform="translate(804.834556 791.719026)">Dropout tắt ở chế độ inference</text>
    </g>
    <g id="text_17">
-    <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #58738b" x="28.068979" y="884.173104" transform="rotate(-0 28.068979 884.173104)">Hình mô tả kiến trúc PyTorch dùng để train; graph ONNX inference có thể gộp Conv/BN và loại Dropout. Không INT8/pruning.</text>
+    <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #58738b" x="28.068979" y="884.173104" transform="rotate(-0 28.068979 884.173104)">Kiến trúc huấn luyện PyTorch; đồ thị ONNX có thể gộp Conv/BN và loại Dropout. Chưa lượng tử hóa/cắt tỉa.</text>
    </g>
   </g>
  </g>

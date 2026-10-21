@@ -1,0 +1,15 @@
+flowchart TB
+    Video["Video thành viên"] --> Sample["Lấy mẫu frame<br/>đọc hướng quay"]
+    Sample --> Detect["YuNet<br/>chỉ giữ một mặt"]
+    Detect --> Crop["Cắt mặt, căn chỉnh<br/>lọc chất lượng và ảnh trùng"]
+    Camera["Ảnh camera Pi của Sơn<br/>đã cắt mặt, lọc chất lượng"] --> Known["Vùng mặt thành viên"]
+    Crop --> Known
+    Known --> Split["Chia thời gian<br/>train / validation / test + purge gap"]
+    Unknown["LFW: vùng mặt Unknown"] --> Identity["Chia theo danh tính<br/>train / validation / test"]
+    Split --> Dataset["Bộ dữ liệu đã chia<br/>tiền xử lý thống nhất"]
+    Identity --> Dataset
+    Dataset --> Train["Huấn luyện trên train"]
+    Train --> Validation["Chọn checkpoint và ngưỡng<br/>bằng validation"]
+    Validation --> Test["Đánh giá cuối trên test"]
+    Test --> Export["Xuất ONNX<br/>checker và đối chiếu đầu ra"]
+    Export --> Deploy["Raspberry Pi<br/>ONNX Runtime CPU"]

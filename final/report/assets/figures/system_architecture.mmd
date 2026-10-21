@@ -1,0 +1,27 @@
+flowchart LR
+    User["Người dùng<br/>Ứng dụng Telegram"] <--> Cloud["Telegram Cloud<br/>Bot API"]
+    subgraph Laptop["Laptop / WSL2"]
+        Bot["Telegram Bot<br/>long polling"]
+        Broker["Mosquitto MQTT"]
+        Explorer["MQTT Explorer<br/>chỉ đọc"]
+        Train["Huấn luyện PyTorch + GPU<br/>Xuất ONNX"]
+        Bot <-->|"lệnh, ACK, sự kiện"| Broker
+        Broker --> Explorer
+    end
+    subgraph PiBox["Raspberry Pi 4"]
+        Agent["Edge agent<br/>MQTT client"]
+        Camera["Camera USB"]
+        Detector["YuNet"]
+        Preprocess["Crop, căn chỉnh<br/>RGB 224x224"]
+        Model["MobileNetV3-Small<br/>ONNX Runtime CPU"]
+        Rejection["Ngưỡng từ chối Unknown"]
+        Snapshot["JPEG chú thích<br/>cache RAM + HTTP token"]
+        Agent -->|"điều khiển"| Camera
+        Camera --> Detector --> Preprocess --> Model --> Rejection
+        Rejection -->|"metadata"| Agent
+        Rejection -->|"nếu là thành viên"| Snapshot
+    end
+    Cloud <--> Bot
+    Broker <-->|"MQTT qua Tailscale"| Agent
+    Train -->|"SSH: ONNX + cấu hình"| Model
+    Snapshot -->|"HTTP qua Tailscale: ảnh riêng"| Bot

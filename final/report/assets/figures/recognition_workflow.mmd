@@ -1,0 +1,35 @@
+sequenceDiagram
+    actor User as Người dùng
+    participant Bot as Telegram Bot
+    participant MQTT as Mosquitto
+    participant Pi as Raspberry Pi
+    User->>Bot: /start
+    Bot->>MQTT: start, request_id, timestamp
+    MQTT->>Pi: command QoS 1
+    Pi->>Pi: mở camera
+    Pi-->>MQTT: ACK, state recognizing
+    MQTT-->>Bot: ACK
+    Bot-->>User: Đang nhận diện...
+    loop Lấy mẫu cho tới khi phiên dừng
+        Pi->>Pi: YuNet phát hiện mặt
+        alt Có đúng một mặt
+            Pi->>Pi: crop, ONNX, ngưỡng Unknown
+            alt Unknown
+                Note over Pi,Bot: Không gửi tin nhắn hoặc ảnh, tiếp tục phiên
+            else Thành viên đã đăng ký
+                Pi-->>MQTT: result metadata, image_id
+                MQTT-->>Bot: recognition event
+                Bot->>MQTT: stop, expected_request_id
+                MQTT->>Pi: dừng phiên tương ứng
+                Pi->>Pi: đóng camera
+                Pi-->>MQTT: ACK idle
+                MQTT-->>Bot: ACK
+                Bot-->>User: Tin nhắn kết quả
+                Bot->>Pi: HTTP GET JPEG có token qua Tailscale
+                Pi-->>Bot: JPEG có khung mặt, tên, confidence
+                Bot-->>User: Ảnh kết quả
+            end
+        else Không có mặt hoặc nhiều mặt
+            Note over Pi,Bot: Không chạy classifier, sự kiện có cooldown
+        end
+    end
