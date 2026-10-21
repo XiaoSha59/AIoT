@@ -1,0 +1,21 @@
+{
+  "device_id": "raspberrypi-01",
+  "timestamp": "2026-10-20T16:39:05.903164+00:00",
+  "online": true,
+  "state": "idle",
+  "camera": null,
+  "model_version": null,
+  "model_bundle_version": null,
+  "rejection_threshold": null,
+  "inference_ms": null,
+  "detection_ms": null,
+  "end_to_end_ms": null,
+  "cpu_percent": 1.5,
+  "cpu_temperature_c": 61.835,
+  "ram_mb": 68.4453125,
+  "error": null,
+  "event": "ack",
+  "request_id": "2c5ec7bb-9f98-4f3c-bd8a-fcea34ceb48f",
+  "action": "status",
+  "ok": true
+}

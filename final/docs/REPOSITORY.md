@@ -1,47 +1,44 @@
 # Repository và Git LFS
 
-EdgeFace nằm trong `final/` của repository `sonnguyen112/AIoT`. Mã nguồn, config mẫu, test, hướng dẫn và báo cáo kiến trúc/phương pháp được chia sẻ qua Git. Model ONNX đang dùng và detector YuNet được lưu bằng Git LFS.
+EdgeFace nằm trong final/ của repository [sonnguyen112/AIoT](https://github.com/sonnguyen112/AIoT). Mã nguồn, cấu hình mẫu, tests, tài liệu vận hành và số liệu thực nghiệm không chứa ảnh mặt được chia sẻ qua Git.
 
-## File được giữ cục bộ
+## Tài liệu và kết quả đang dùng
 
-- `.env`, bản backup `.env.*`, MQTT password file và SSH key.
-- `dataset/`: video, crop khuôn mặt, ảnh Unknown, metadata và database thiết bị.
-- `runs/`: checkpoint, lịch sử train/evaluation và hình diagnostic.
-- `reports/generated/`: kết quả kiểm thử, telemetry, benchmark và state cục bộ.
-- Cache pretrained, bản sao export và release rollback chưa được chọn để chia sẻ.
-- `.venv*`, cache Python/pytest, metadata package và thư mục archive.
+- [PROJECT_HANDOFF.md](../report/PROJECT_HANDOFF.md): tài liệu tổng hợp cho team, làm nguồn viết báo cáo cuối kỳ và slide.
+- [BENCHMARK_20261020.md](../report/BENCHMARK_20261020.md): phương pháp đo và đối sánh PyTorch/ONNX trên cùng Pi.
+- report/experiments/team_20261020_son_live/: metadata training/evaluation/deployment của model hiện hành.
+- report/experiments/benchmark_team_20261020/: số liệu benchmark và provenance.
+- report/experiments/baseline_team_20261020.json: bằng chứng đối sánh head-only/fine-tune trước đợt cập nhật camera; dùng test 155 ảnh riêng, không trộn với test 181 ảnh hiện tại.
+- report/assets/figures/: ảnh kiến trúc YuNet, MobileNetV3-Small và training loss, gồm PNG/SVG. Tạo lại bằng python -m scripts.render_report_figures.
 
-Việc dùng LFS không tự làm file riêng tư: dữ liệu tải qua LFS vẫn được người có quyền repository truy cập. Vì vậy dataset khuôn mặt và secrets không được đưa lên cả Git lẫn LFS.
+## Model inference
 
-## Clone
+Git LFS quản lý detector YuNet và các ONNX release được chọn. Giữ release 5010dc47644c đang active và 024f31fdc9b8 để rollback cùng classifier sáu lớp. Model demo hai lớp và export trùng đã được dọn. License và checksum của detector nằm trong models/.
 
-```bash
+Mỗi bundle gồm ONNX, classes, preprocessing, threshold và export validation. Chỉ đổi models/active sau khi export/checker/parity và kiểm tra trên Pi thành công. Không chỉnh riêng classes/threshold của một bundle đã xuất.
+
+## Dữ liệu riêng trên máy phát triển
+
+- .env, MQTT password file, SSH key và cấu hình tài khoản không đưa lên Git.
+- Video gốc, phiên camera gốc của Sơn và dataset revision mới nhất 995 crop được giữ để train lại.
+- Checkpoint tốt nhất của run hiện hành và checkpoint khởi tạo/head-only cần cho đối chứng được giữ ở runs/.
+- File benchmark gốc của đợt hiện tại được giữ ở reports/generated/; bản metadata công bố nằm trong report/experiments/.
+- .venv và dependency runtime đang sử dụng được giữ nguyên.
+- Bản patch ghi lại chỉnh sửa thủ công trước đợt publish cũ được giữ riêng tại ~/.local/share/edgeface/backups/, ngoài repository.
+
+Các dataset dẫn xuất lỗi thời (hai lớp, frame sai chiều, revision đã được bao hàm trong dataset mới), checkpoint trung gian, tar đồng bộ test, báo cáo trùng, kết quả smoke cũ và cache Python đã được dọn. Video gốc, ảnh camera gốc, secrets, cấu hình tên hiển thị và dịch vụ đang chạy không bị thay đổi.
+
+LFS không làm file trở thành riêng tư: người có quyền repository vẫn tải được dữ liệu LFS. Không đưa ảnh khuôn mặt, checkpoint training hoặc secrets lên Git/LFS.
+
+## Clone và làm việc
+
+~~~bash
 git lfs install
 git clone https://github.com/sonnguyen112/AIoT.git
 cd AIoT/final
 git lfs pull
-git lfs ls-files
-```
+~~~
 
-Clone trên WSL/Linux để symlink `models/active` được tạo đúng. Dataset không có trong repository; có thể dùng model ONNX để demo hoặc chuẩn bị dataset riêng để train lại.
+Clone trên WSL/Linux để symlink models/active được giữ đúng. Dataset/checkpoint riêng không có trong repository. Khi bổ sung release mới, cập nhật allowlist trong .gitignore cùng symlink active; kiểm tra git diff --cached và git lfs ls-files trước khi push.
 
-## Dọn file lỗi thời
-
-Đã bỏ các script cài SSH tunnel/keepalive cũ, config tunnel sinh tự động và script tạo báo cáo/slide vốn cố định vào thí nghiệm `runs/mvp`. Tailscale là đường kết nối MQTT hiện tại. SSH quản trị và deployment vẫn hoạt động.
-
-Báo cáo kết quả, hình benchmark và slide của thí nghiệm một thành viên được chuyển vào `.local_archive/cleanup-*/` trên máy phát triển, cùng manifest để khôi phục khi cần. Thư mục này không được upload. Dữ liệu/checkpoint/model rollback được giữ nguyên; runtime Docker/Pi không bị thay đổi bởi việc dọn repository.
-
-Báo cáo hiện dùng: [ARCHITECTURE_AND_METHODS.md](../report/ARCHITECTURE_AND_METHODS.md). Đánh giá/benchmark phiên bản cả team và slide chính thức sẽ bổ sung sau khi có đủ dữ liệu.
-
-## Chia sẻ model mới
-
-Export, calibration và parity phải hoàn tất trước khi chọn release để chia sẻ. Cho phép đúng thư mục release trong `final/.gitignore`, cập nhật `models/active`, rồi kiểm tra:
-
-```bash
-git status --short
-git check-attr filter -- models/releases/<release>/face_classifier.onnx
-git lfs ls-files
-git diff --cached --stat
-```
-
-File ONNX/checkpoint lớn có attribute LFS; ignore vẫn giữ checkpoint training riêng tư. Không dùng `git add -f dataset` hoặc `git add -f .env`. Git LFS phải được cài cả trên máy tạo commit lẫn máy clone.
+Cleanup chỉ áp dụng cho final/. Các thay đổi và dữ liệu của midterm/ được giữ nguyên.

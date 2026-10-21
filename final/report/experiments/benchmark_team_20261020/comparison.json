@@ -1,0 +1,367 @@
+{
+  "device": "raspberrypi",
+  "architecture": "aarch64",
+  "rounds": 3,
+  "iterations_per_round": 200,
+  "warmup_per_process": 30,
+  "isolation": "A fresh sequential subprocess per engine/round; no process loads both runtimes",
+  "order": "Alternate PyTorch/ONNX order between rounds",
+  "engines": {
+    "pytorch": {
+      "latency": {
+        "samples": 600,
+        "mean_ms": 74.08037123832968,
+        "p50_ms": 74.33089950006888,
+        "p95_ms": 75.5635622499426,
+        "std_ms": 1.2651071687558484,
+        "min_ms": 71.9622789999903,
+        "max_ms": 82.15833000008388
+      },
+      "classifier_fps": 13.49700631061965,
+      "cpu_percent_one_core_units": 192.3548349368477,
+      "cpu_percent_total_capacity": 48.08870873421193,
+      "peak_inference_rss_bytes": 416133120,
+      "peak_process_rss_bytes": 416325632,
+      "warm_rss_mean_bytes": 414287189.3333333,
+      "model_file_bytes": 6218949,
+      "model_plus_config_bytes": 6249459,
+      "runtime_installed_files": {
+        "packages": {
+          "torch": "2.5.1",
+          "torchvision": "0.20.1"
+        },
+        "logical_bytes": 448833993,
+        "allocated_bytes": 483213312,
+        "files": 13167,
+        "definition": "Distribution-owned installed files; excludes common/transitive dependencies and OS"
+      },
+      "evaluation": {
+        "samples": 181,
+        "accuracy": 1.0,
+        "test_cross_entropy_unweighted": 9.730094218905309e-05,
+        "macro_f1": 1.0,
+        "known_member_accuracy": 1.0,
+        "unknown_rejection_rate": 1.0,
+        "false_acceptance_rate": 0.0,
+        "per_class": {
+          "Unknown": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "support": 21
+          },
+          "dung": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "support": 23
+          },
+          "hung": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "support": 30
+          },
+          "son": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "support": 64
+          },
+          "thanh": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "support": 24
+          },
+          "tuan": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "support": 19
+          }
+        },
+        "confusion_matrix": [
+          [
+            21,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            23,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            30,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            64,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            24,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            19
+          ]
+        ],
+        "independent_known_test": false,
+        "unknown_identity_disjoint": true
+      },
+      "hardware_before": [
+        {
+          "temperature_c": 55.504,
+          "cpu_frequency_mhz": 1800.0,
+          "throttled": "throttled=0x0",
+          "system_available_ram_bytes": 3317272576
+        },
+        {
+          "temperature_c": 65.731,
+          "cpu_frequency_mhz": 1800.0,
+          "throttled": "throttled=0x0",
+          "system_available_ram_bytes": 3340369920
+        },
+        {
+          "temperature_c": 65.244,
+          "cpu_frequency_mhz": 1800.0,
+          "throttled": "throttled=0x0",
+          "system_available_ram_bytes": 3351146496
+        }
+      ],
+      "hardware_end": [
+        {
+          "temperature_c": 62.322,
+          "cpu_frequency_mhz": 1800.0,
+          "throttled": "throttled=0x0",
+          "system_available_ram_bytes": 3084455936
+        },
+        {
+          "temperature_c": 65.731,
+          "cpu_frequency_mhz": 1800.0,
+          "throttled": "throttled=0x0",
+          "system_available_ram_bytes": 3126792192
+        },
+        {
+          "temperature_c": 65.244,
+          "cpu_frequency_mhz": 1800.0,
+          "throttled": "throttled=0x0",
+          "system_available_ram_bytes": 3130863616
+        }
+      ],
+      "per_round_mean_ms": [
+        72.8186535899988,
+        74.6048440899915,
+        74.81761603499876
+      ]
+    },
+    "onnx": {
+      "latency": {
+        "samples": 600,
+        "mean_ms": 30.73167221499905,
+        "p50_ms": 30.71987899988926,
+        "p95_ms": 31.371101799936696,
+        "std_ms": 0.5280955129616619,
+        "min_ms": 29.94832000013048,
+        "max_ms": 34.84718599997905
+      },
+      "classifier_fps": 32.52886919372069,
+      "cpu_percent_one_core_units": 201.8416333470369,
+      "cpu_percent_total_capacity": 50.46040833675922,
+      "peak_inference_rss_bytes": 81088512,
+      "peak_process_rss_bytes": 81403904,
+      "warm_rss_mean_bytes": 79945728.0,
+      "model_file_bytes": 6105639,
+      "model_plus_config_bytes": 6137068,
+      "runtime_installed_files": {
+        "packages": {
+          "onnxruntime": "1.20.1"
+        },
+        "logical_bytes": 36588847,
+        "allocated_bytes": 37928960,
+        "files": 591,
+        "definition": "Distribution-owned installed files; excludes common/transitive dependencies and OS"
+      },
+      "evaluation": {
+        "samples": 181,
+        "accuracy": 1.0,
+        "test_cross_entropy_unweighted": 9.730307777605788e-05,
+        "macro_f1": 1.0,
+        "known_member_accuracy": 1.0,
+        "unknown_rejection_rate": 1.0,
+        "false_acceptance_rate": 0.0,
+        "per_class": {
+          "Unknown": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "support": 21
+          },
+          "dung": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "support": 23
+          },
+          "hung": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "support": 30
+          },
+          "son": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "support": 64
+          },
+          "thanh": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "support": 24
+          },
+          "tuan": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "support": 19
+          }
+        },
+        "confusion_matrix": [
+          [
+            21,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            23,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            30,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            64,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            24,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            19
+          ]
+        ],
+        "independent_known_test": false,
+        "unknown_identity_disjoint": true
+      },
+      "hardware_before": [
+        {
+          "temperature_c": 61.348,
+          "cpu_frequency_mhz": 1800.0,
+          "throttled": "throttled=0x0",
+          "system_available_ram_bytes": 3345956864
+        },
+        {
+          "temperature_c": 64.27,
+          "cpu_frequency_mhz": 1800.0,
+          "throttled": "throttled=0x0",
+          "system_available_ram_bytes": 3300048896
+        },
+        {
+          "temperature_c": 65.244,
+          "cpu_frequency_mhz": 1800.0,
+          "throttled": "throttled=0x0",
+          "system_available_ram_bytes": 3349671936
+        }
+      ],
+      "hardware_end": [
+        {
+          "temperature_c": 64.757,
+          "cpu_frequency_mhz": 1800.0,
+          "throttled": "throttled=0x0",
+          "system_available_ram_bytes": 3292823552
+        },
+        {
+          "temperature_c": 66.705,
+          "cpu_frequency_mhz": 1800.0,
+          "throttled": "throttled=0x0",
+          "system_available_ram_bytes": 3322769408
+        },
+        {
+          "temperature_c": 68.653,
+          "cpu_frequency_mhz": 1800.0,
+          "throttled": "throttled=0x0",
+          "system_available_ram_bytes": 3347214336
+        }
+      ],
+      "per_round_mean_ms": [
+        30.169765194992806,
+        30.769326749998527,
+        31.255924700005835
+      ]
+    }
+  },
+  "parity": {
+    "samples": 181,
+    "max_absolute_logit_difference": 8.153915405273438e-05,
+    "argmax_agreement": 1.0,
+    "rejection_decisions_match": true,
+    "allclose_rtol": 0.001,
+    "allclose_atol": 0.0001
+  },
+  "manifest_sha256": "e49dc56d80cda94e6f5132d613b972d0db4f8dfd8ea9b987a1dc777a2b2f88dd",
+  "checkpoint_sha256": "af8fcef57f90d4315347b0c0a72c06cc0d25d636ed0c1675e5a305b2015d8175",
+  "onnx_sha256": "1e170d7902b8836209030c3f9e166dfa1c31bc42a570e37d82294e80d6d15f81"
+}

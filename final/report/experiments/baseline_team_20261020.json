@@ -1,0 +1,519 @@
+{
+  "description": "Historical matched head-only versus fine-tuned baseline on the original team revision; not the current 181-image test.",
+  "head_only_evaluation": {
+    "accuracy": 1.0,
+    "known_member_accuracy": 1.0,
+    "unknown_rejection_rate": 1.0,
+    "false_acceptance_rate": 0.0,
+    "known_false_rejection_rate": 0.0,
+    "balanced_known_unknown_accuracy": 1.0,
+    "known_samples": 134,
+    "unknown_samples": 21,
+    "per_class": {
+      "Unknown": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 21.0
+      },
+      "dung": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 23.0
+      },
+      "hung": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 30.0
+      },
+      "son": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 38.0
+      },
+      "thanh": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 24.0
+      },
+      "tuan": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 19.0
+      },
+      "accuracy": 1.0,
+      "macro avg": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 155.0
+      },
+      "weighted avg": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 155.0
+      }
+    },
+    "confusion_matrix": [
+      [
+        21,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        23,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        30,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        38,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        24,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        19
+      ]
+    ],
+    "threshold": 0.5708061455653182,
+    "evaluation_split": "test",
+    "classes": [
+      "Unknown",
+      "dung",
+      "hung",
+      "son",
+      "thanh",
+      "tuan"
+    ],
+    "independent_known_test": false,
+    "unknown_identity_disjoint": true,
+    "checkpoint_sha256": "cdd014179709861c4b28710b2c4965e6603180aae3757731b18d0b003107a324",
+    "manifest_sha256": "3a1a1be6375fa48175c8c39167bbe36eeaaa3795f5c7c5d06c6ab8d59c20c493",
+    "limitation": "Known-member test frames share source recordings with training; web Unknown differs from Pi camera"
+  },
+  "fine_tuned_evaluation": {
+    "accuracy": 1.0,
+    "known_member_accuracy": 1.0,
+    "unknown_rejection_rate": 1.0,
+    "false_acceptance_rate": 0.0,
+    "known_false_rejection_rate": 0.0,
+    "balanced_known_unknown_accuracy": 1.0,
+    "known_samples": 134,
+    "unknown_samples": 21,
+    "per_class": {
+      "Unknown": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 21.0
+      },
+      "dung": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 23.0
+      },
+      "hung": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 30.0
+      },
+      "son": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 38.0
+      },
+      "thanh": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 24.0
+      },
+      "tuan": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 19.0
+      },
+      "accuracy": 1.0,
+      "macro avg": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 155.0
+      },
+      "weighted avg": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 155.0
+      }
+    },
+    "confusion_matrix": [
+      [
+        21,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        23,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        30,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        38,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        24,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        19
+      ]
+    ],
+    "threshold": 0.5832735008668468,
+    "evaluation_split": "test",
+    "classes": [
+      "Unknown",
+      "dung",
+      "hung",
+      "son",
+      "thanh",
+      "tuan"
+    ],
+    "independent_known_test": false,
+    "unknown_identity_disjoint": true,
+    "checkpoint_sha256": "f83a4ec61dd6eca3aa6d0650dae5d79cd51a0f6e4bd6c1c450d241ef3f9dc80c",
+    "manifest_sha256": "3a1a1be6375fa48175c8c39167bbe36eeaaa3795f5c7c5d06c6ab8d59c20c493",
+    "limitation": "Known-member test frames share source recordings with training; web Unknown differs from Pi camera"
+  },
+  "split_summary": {
+    "seed": 42,
+    "classes": [
+      "Unknown",
+      "dung",
+      "hung",
+      "son",
+      "thanh",
+      "tuan"
+    ],
+    "distribution": {
+      "train": {
+        "Unknown": 120,
+        "dung": 71,
+        "hung": 92,
+        "son": 136,
+        "thanh": 71,
+        "tuan": 73
+      },
+      "val": {
+        "Unknown": 26,
+        "dung": 25,
+        "hung": 26,
+        "son": 35,
+        "thanh": 24,
+        "tuan": 18
+      },
+      "test": {
+        "Unknown": 21,
+        "dung": 23,
+        "hung": 30,
+        "son": 38,
+        "thanh": 24,
+        "tuan": 19
+      }
+    },
+    "evaluation_protocols": [
+      "multi_video_purged_temporal",
+      "session_split",
+      "single_video_purged_temporal"
+    ],
+    "independent_known_test": false,
+    "unknown_identity_disjoint": true
+  },
+  "training_run": {
+    "device": "cuda",
+    "gpu": "NVIDIA GeForce RTX 2050",
+    "torch": "2.14.0+cu130",
+    "elapsed_s": 196.06778972099983,
+    "seed": 42,
+    "classifier_max_weight_update": 0.04704377055168152,
+    "last_backbone_max_weight_update": 0.005320973694324493,
+    "best_stage": "fine",
+    "best_epoch": 17,
+    "manifest_sha256": "3a1a1be6375fa48175c8c39167bbe36eeaaa3795f5c7c5d06c6ab8d59c20c493",
+    "initial_checkpoint_sha256": null,
+    "initial_validation_loss": 1.9206167273707204,
+    "initial_validation_accuracy": 0.19480519480519481,
+    "args": {
+      "data": "dataset/revisions/team_20261020/processed",
+      "output": "runs/team_20261020",
+      "head_epochs": 10,
+      "fine_epochs": 20,
+      "batch_size": 16,
+      "patience": 5,
+      "seed": 42,
+      "device": "cuda",
+      "workers": 2,
+      "init_checkpoint": null,
+      "head_lr": 0.001,
+      "fine_lr": 0.0001
+    }
+  },
+  "history": [
+    {
+      "epoch": 1,
+      "stage": "head",
+      "train_loss": 0.4224923128199302,
+      "train_accuracy": 0.8934280639431617,
+      "val_loss": 0.01959758315707085,
+      "val_accuracy": 1.0
+    },
+    {
+      "epoch": 2,
+      "stage": "head",
+      "train_loss": 0.012623393335784943,
+      "train_accuracy": 1.0,
+      "val_loss": 0.004584641225504471,
+      "val_accuracy": 1.0
+    },
+    {
+      "epoch": 3,
+      "stage": "head",
+      "train_loss": 0.004599561775847608,
+      "train_accuracy": 1.0,
+      "val_loss": 0.002435606221710755,
+      "val_accuracy": 1.0
+    },
+    {
+      "epoch": 4,
+      "stage": "head",
+      "train_loss": 0.0032092814302100052,
+      "train_accuracy": 1.0,
+      "val_loss": 0.001846023093377597,
+      "val_accuracy": 1.0
+    },
+    {
+      "epoch": 5,
+      "stage": "head",
+      "train_loss": 0.0018165244817647745,
+      "train_accuracy": 1.0,
+      "val_loss": 0.0018305713191776622,
+      "val_accuracy": 1.0
+    },
+    {
+      "epoch": 6,
+      "stage": "head",
+      "train_loss": 0.001780483279851568,
+      "train_accuracy": 1.0,
+      "val_loss": 0.0012363602957981578,
+      "val_accuracy": 1.0
+    },
+    {
+      "epoch": 7,
+      "stage": "head",
+      "train_loss": 0.0014551444328390062,
+      "train_accuracy": 1.0,
+      "val_loss": 0.0011316063342723306,
+      "val_accuracy": 1.0
+    },
+    {
+      "epoch": 8,
+      "stage": "head",
+      "train_loss": 0.0011705097703194514,
+      "train_accuracy": 1.0,
+      "val_loss": 0.0012142407238617987,
+      "val_accuracy": 1.0
+    },
+    {
+      "epoch": 9,
+      "stage": "head",
+      "train_loss": 0.001085582915591167,
+      "train_accuracy": 1.0,
+      "val_loss": 0.0010502794719688207,
+      "val_accuracy": 1.0
+    },
+    {
+      "epoch": 10,
+      "stage": "head",
+      "train_loss": 0.0007192542541567005,
+      "train_accuracy": 1.0,
+      "val_loss": 0.000714817659456174,
+      "val_accuracy": 1.0
+    },
+    {
+      "epoch": 11,
+      "stage": "fine",
+      "train_loss": 0.00012523731819614467,
+      "train_accuracy": 1.0,
+      "val_loss": 2.3623347488693697e-05,
+      "val_accuracy": 1.0
+    },
+    {
+      "epoch": 12,
+      "stage": "fine",
+      "train_loss": 9.164387501595574e-06,
+      "train_accuracy": 1.0,
+      "val_loss": 4.31989131182892e-05,
+      "val_accuracy": 1.0
+    },
+    {
+      "epoch": 13,
+      "stage": "fine",
+      "train_loss": 6.802792565474223e-06,
+      "train_accuracy": 1.0,
+      "val_loss": 1.2739107347301029e-05,
+      "val_accuracy": 1.0
+    },
+    {
+      "epoch": 14,
+      "stage": "fine",
+      "train_loss": 4.669382694824489e-06,
+      "train_accuracy": 1.0,
+      "val_loss": 7.351006903402411e-06,
+      "val_accuracy": 1.0
+    },
+    {
+      "epoch": 15,
+      "stage": "fine",
+      "train_loss": 2.9620788289201813e-06,
+      "train_accuracy": 1.0,
+      "val_loss": 3.1336378749924053e-06,
+      "val_accuracy": 1.0
+    },
+    {
+      "epoch": 16,
+      "stage": "fine",
+      "train_loss": 5.509313837036632e-06,
+      "train_accuracy": 1.0,
+      "val_loss": 3.526542512348625e-06,
+      "val_accuracy": 1.0
+    },
+    {
+      "epoch": 17,
+      "stage": "fine",
+      "train_loss": 6.808415995547903e-07,
+      "train_accuracy": 1.0,
+      "val_loss": 2.1084187084033907e-06,
+      "val_accuracy": 1.0
+    },
+    {
+      "epoch": 18,
+      "stage": "fine",
+      "train_loss": 2.2381434389054897e-06,
+      "train_accuracy": 1.0,
+      "val_loss": 4.443025604201738e-06,
+      "val_accuracy": 1.0
+    },
+    {
+      "epoch": 19,
+      "stage": "fine",
+      "train_loss": 2.6714164435373166e-06,
+      "train_accuracy": 1.0,
+      "val_loss": 5.479599957895927e-06,
+      "val_accuracy": 1.0
+    },
+    {
+      "epoch": 20,
+      "stage": "fine",
+      "train_loss": 9.78648312137356e-07,
+      "train_accuracy": 1.0,
+      "val_loss": 3.8450425206264254e-06,
+      "val_accuracy": 1.0
+    },
+    {
+      "epoch": 21,
+      "stage": "fine",
+      "train_loss": 3.3958645545769107e-07,
+      "train_accuracy": 1.0,
+      "val_loss": 3.4665576255996844e-06,
+      "val_accuracy": 1.0
+    },
+    {
+      "epoch": 22,
+      "stage": "fine",
+      "train_loss": 4.647577159325282e-07,
+      "train_accuracy": 1.0,
+      "val_loss": 2.5308517812255057e-06,
+      "val_accuracy": 1.0
+    }
+  ],
+  "source_provenance": {
+    "source_sha256": {
+      "training/import_video.py": "99ef522d5f8365b62382af02d36f25a36f711b76f4ff313d58abba8896e8dea4",
+      "training/data.py": "8f5f826c8b322d9fd97117cb43260a447e2612f030230c5fb8629332c0344e4a",
+      "training/dataset.py": "05088c0bf701f7b7ea4255fb4eab8a9e089ea3a414659841465fc3783feef42f",
+      "training/train.py": "ca4f78d74c5c12259506ab544d53eb3636cfec4218fde442961249d5eaa0d9e6",
+      "training/evaluate.py": "d24f5212c8075abd0e78f92f30c3c0fc2503d7ce2e046c059b13aaff276a935f",
+      "training/export_onnx.py": "fd8125c65d3f54c502d92298d80e683d1f2695b9524ef23bab20b38064149bc1",
+      "training/verify_onnx.py": "7e5f91bff11509c191a6b5678425edc37e62bae43143706f20d48135f69e05ed",
+      "edgeface/preprocess.py": "7b608acb213c9dd34d8ec19af1f5eb5ed37bc0098362cf2e9d0ac16bfa69a79d"
+    },
+    "dataset_manifest_sha256": "3a1a1be6375fa48175c8c39167bbe36eeaaa3795f5c7c5d06c6ab8d59c20c493"
+  }
+}

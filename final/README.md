@@ -7,10 +7,10 @@ Phiên bản 20/10/2026 đã train và triển khai 5 thành viên: Dung, Hùng,
 Release hiện tại `5010dc47644c` (ONNX `1e170d7902b8`) dùng classifier 6 lớp, fine-tune tiếp từ release team ban đầu với dữ liệu camera Sơn và replay dữ liệu cả nhóm. Đã sửa lỗi RGB/BGR khi USB camera đàm phán MJPEG; đạt 181/181 ảnh test, gồm 26 ảnh camera giữ lại, cùng quyết định ONNX trên laptop/Pi. **Các tập vẫn chung phiên quay, chưa là đánh giá độc lập theo phiên.** Bundle được cấu hình quản lý bằng Git LFS; dữ liệu mặt và checkpoint giữ cục bộ, release trước giữ để rollback.
 
 - [Kiến trúc ngắn gọn cho team](docs/ARCHITECTURE.md)
-- [Báo cáo chi tiết kiến trúc và phương pháp — tài nguyên cho team, chưa kèm benchmark](report/ARCHITECTURE_AND_METHODS.md)
-- [Kết quả training, evaluation và deployment cả team — 20/10/2026](report/TEAM_TRAINING_20261020.md)
-- [Sửa màu camera và bổ sung dữ liệu Sơn — 20/10/2026](report/SON_CAMERA_UPDATE_20261020.md)
+- [Báo cáo tổng hợp cho team: kiến trúc, dữ liệu, mô hình và kết quả](report/PROJECT_HANDOFF.md)
+- [Ảnh kiến trúc YuNet, MobileNetV3 và biểu đồ training loss — PNG/SVG](report/assets/figures/)
 - [Tin nhắn và ảnh nhận diện có bounding box trên Telegram](docs/PHOTO_NOTIFICATIONS.md)
+- [Benchmark PyTorch/ONNX trên cùng Pi: latency/FPS, Accuracy/Loss/F1, RAM/Flash](report/BENCHMARK_20261020.md)
 - [Môi trường và trạng thái kiểm chứng](docs/ENVIRONMENT.md)
 - [MQTT Explorer](docs/MQTT_EXPLORER.md)
 - [Tailscale native và tự khởi động WSL/Pi](docs/TAILSCALE.md)
@@ -116,13 +116,6 @@ python -m training.dataset split
 
 Importer đọc metadata xoay của video MP4/MOV và đưa ảnh về đúng hướng trước khi chạy YuNet; crop có xoay theo mắt khi landmarks hợp lệ. Loại frame không/multiple faces, mặt nhỏ, mờ, quá tối/sáng, crop trùng lặp. Blur được đo trên ảnh tham chiếu 224×224 để không phụ thuộc độ phân giải video. Metadata lưu source, session, SHA256, hướng ảnh và thời gian trong video. Import lần nữa tạo phiên mới; không import lặp cùng video vào nhiều nhóm dữ liệu.
 
-MVP một video được người dùng yêu cầu:
-
-```bash
-python -m training.import_video dataset/videos/son/1.mp4 --name son --consent --single-video-temporal --interval 0.12 --duplicate-hamming 1
-python -m training.dataset split --allow-single-video-temporal
-```
-
 Chia các đoạn 0–50% / 60–75% / 85–100%; bỏ trống phần giữa. Đây là **đánh giá cùng phiên quay**, không thay thế test trên video mới. Unknown được chia theo danh tính, chưa xuất hiện trong train. LFW là dữ liệu web công khai có nguồn/checksum; không tuyên bố đã xác minh consent cho người trong LFW và không phân phối lại ảnh.
 
 `processed/` đã có thì script từ chối ghi đè: lưu bản cũ sang thư mục riêng trước khi chia lại. `audit --delete-corrupt` chỉ xóa ảnh hỏng khi người dùng gọi rõ tùy chọn đó; mặc định chỉ báo cáo và loại khỏi split. Không commit dataset hoặc ảnh diagnostic.
@@ -138,10 +131,10 @@ python -m training.train --data dataset/revisions/team_20261020_son_live/process
 Các lệnh bên dưới áp dụng cho một dataset đã chia tập. Dùng output mới cho từng lần train. Khi thêm class, tạo head mới từ ImageNet; không warm-start trực tiếp head hai lớp cũ. Run cả team đã thực hiện được ghi trong báo cáo ngày 20/10; benchmark camera dài hạn và đánh giá phiên độc lập vẫn cần bổ sung.
 
 ```bash
-TORCH_HOME="$PWD/models/pretrained" python -m training.train --data dataset/processed --output runs/team --device auto --batch-size 16
-python -m training.evaluate calibrate --data dataset/processed --checkpoint runs/team/best_model.pth --threshold runs/team/threshold.json
-python -m training.evaluate test --data dataset/processed --checkpoint runs/team/best_model.pth --threshold runs/team/threshold.json --output runs/team/evaluation
-python -m training.export_onnx --data dataset/processed --checkpoint runs/team/best_model.pth --threshold runs/team/threshold.json --output models/team
+TORCH_HOME="$PWD/models/pretrained" python -m training.train --data dataset/revisions/team_20261020_son_live/processed --output runs/team --device auto --batch-size 16
+python -m training.evaluate calibrate --data dataset/revisions/team_20261020_son_live/processed --checkpoint runs/team/best_model.pth --threshold runs/team/threshold.json
+python -m training.evaluate test --data dataset/revisions/team_20261020_son_live/processed --checkpoint runs/team/best_model.pth --threshold runs/team/threshold.json --output runs/team/evaluation
+python -m training.export_onnx --data dataset/revisions/team_20261020_son_live/processed --checkpoint runs/team/best_model.pth --threshold runs/team/threshold.json --output models/team
 ```
 
 Head training đóng băng backbone; giai đoạn sau mở các block cuối, LR nhỏ hơn. Có class-weighted loss, augmentation vừa phải, seed, early stopping và checkpoint tốt nhất theo validation loss. Không dùng test để chọn threshold/hyperparameter. Preprocessing training và inference dùng chung RGB, PIL bilinear 224×224, ImageNet mean/std.
@@ -184,19 +177,20 @@ Tính năng ảnh đã bật cho demo: **tin nhắn kết quả và ảnh đư�
 
 Tên hiển thị cấu hình tại `configs/display_names.json`: `son` → `Nguyễn Hồ Trường Sơn`. Model/dataset dùng nhãn ổn định; Telegram dùng tên đầy đủ. Đổi mapping không cần train lại. `AUTO_STOP_ON_KNOWN=true` bật hành vi tự dừng.
 
-Collection là giai đoạn sau theo scope người dùng: target 150 mặc định, progress qua MQTT, timeout/stop và quality filtering. Chưa công bố dataset IoT thật hoàn thành. Đồng bộ bằng `PI_HOST=pi@<PI_IP> bash scripts/sync_dataset.sh`.
+Collection đã được chạy thực tế với 150 crop Sơn từ camera Pi: target 150 mặc định, progress qua MQTT, timeout/stop và quality filtering. Các thành viên còn lại cần bổ sung phiên camera độc lập. Đồng bộ bằng `PI_HOST=pi@<PI_IP> bash scripts/sync_dataset.sh`.
 
 ## Benchmark và kiểm thử
 
 ```bash
 python -m pytest
 python -m scripts.mqtt_smoke
-python -m training.benchmark --image <REAL_FACE_CROP> --checkpoint runs/video2/best_model.pth --output reports/generated/benchmark_video2_laptop.json
-# Trên Pi, ở idle và camera không bị tiến trình khác chiếm:
-.venv/bin/python -m training.benchmark --image <LOCAL_REAL_FACE_CROP> --camera --output reports/generated/benchmark_video2_camera_pi.json
+# Trên Pi, sau khi đồng bộ checkpoint/dữ liệu test riêng; dùng output mới:
+.venv/bin/python -m training.benchmark_runtime suite --model models/releases/5010dc47644c --checkpoint reports/generated/benchmark_team_20261020/best_model.pth --data reports/generated/team_20261020_son_live_test --output reports/generated/<new_run> --threads 2 --warmup 30 --iterations 200 --rounds 3
 ```
 
-Benchmark có warmup, mean/P50/P95, classifier riêng, detection/capture/pipeline riêng, FPS, process RSS, CPU và nhiệt độ. CPU process dùng đơn vị một core: Pi 4 có thể đạt 400%; không nhầm 333% với vượt quá tổng CPU. Pipeline latency loại trừ MQTT/Telegram và không phải latency từ phơi sáng sensor. FPS benchmark chạy không throttle; agent sampling mặc định 0.15 giây nên FPS khi demo thấp hơn.
+Đã benchmark release hiện tại trên cùng Pi: PyTorch CPU **74,080 ms / 13,497 classifier FPS**; ONNX CPU **30,732 ms / 32,529 classifier FPS**. RSS peak inference **396,855 → 77,332 MiB**, model **5,931 → 5,823 MiB**, Accuracy **181/181**, macro F1 **1,000** ở cả hai runtime; có test loss, model/bundle/runtime storage và raw measurements trong [báo cáo benchmark](report/BENCHMARK_20261020.md). Đánh giá accuracy vẫn chia từ cùng phiên quay, không đại diện mọi điều kiện camera.
+
+Suite dùng process riêng từng runtime để so RAM, 3 lượt × 200 inference, warmup 30; không cùng nạp hai runtime rồi suy ra RAM riêng lẻ. Benchmark pipeline bằng `training.benchmark_pipeline --mode replay` trên frame có sẵn cho **8,528 FPS**, không đo camera acquisition; không gọi đó là live camera FPS. Theo yêu cầu người dùng, đợt này không mở camera để benchmark. CPU process dùng đơn vị một core: Pi 4 có thể đạt 400%. Agent sampling/cooldown/auto-stop khiến throughput demo khác benchmark không throttle.
 
 PyTorch CPU so với ONNX CPU phải cùng thiết bị/input/threads. Pi không cần PyTorch để chạy runtime; chỉ cài tùy chọn nếu muốn benchmark cùng Pi. Không so GPU laptop với CPU Pi rồi kết luận về ONNX.
 
@@ -214,6 +208,6 @@ PyTorch CPU so với ONNX CPU phải cùng thiết bị/input/threads. Pi không
 
 Dataset, checkpoint và config private được gitignore; bundle ONNX đang deploy được chia sẻ bằng LFS; dataset/file quyền 700/600. Camera probe/benchmark crop chứa ảnh thật và chỉ lưu local. `python -m scripts.delete_member <name>` là dry-run; thêm `--confirm-name <name>` mới xóa dữ liệu local. Sau đó retrain model để loại thông tin từ trọng số; xóa cả bản đồng bộ trên laptop/Pi và backups theo chính sách nhóm. Không dùng hệ thống làm kiểm soát truy cập có độ tin cậy cao: **chưa có liveness detection**, ảnh in/màn hình có thể đánh lừa classifier.
 
-Model đang chia sẻ là bản demo một thành viên. Train/test được chia theo đoạn thời gian từ cùng nguồn video nên chưa chứng minh khả năng tổng quát ở phiên mới. Khi đủ dữ liệu team, cần chia theo phiên độc lập, train lại và đo chất lượng/hiệu năng trên Pi. Chưa có liveness detection hoặc đánh giá live-camera đầy đủ có ground truth.
+Model đang chia sẻ phân loại 5 thành viên và Unknown. Train/test vẫn chung nguồn quay nên chưa chứng minh khả năng tổng quát ở phiên mới. Cần bổ sung các phiên độc lập cho cả team, train lại và đánh giá trên Pi. Chưa có liveness detection hoặc đánh giá live-camera đầy đủ có ground truth.
 
 Nguồn: [YuNet/OpenCV](https://docs.opencv.org/4.12.0/d0/dd4/tutorial_dnn_face.html), [MobileNetV3-Small](https://docs.pytorch.org/vision/stable/models/generated/torchvision.models.mobilenet_v3_small.html), [ONNX Runtime Python ARM64](https://onnxruntime.ai/docs/get-started/with-python.html), [LFW research paper](https://people.cs.umass.edu/~elm/papers/lfw.pdf), [LFW loader/checksum](https://github.com/scikit-learn/scikit-learn/blob/main/sklearn/datasets/_lfw.py).

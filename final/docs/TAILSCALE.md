@@ -77,7 +77,7 @@ python -m scripts.connect_tailscale --pi-host pi@<PI_SSH_IP>
 
 ## Kiểm chứng và xử lý lỗi
 
-Đã đo ping hai chiều qua đường trực tiếp khoảng 10–11 ms, SSH qua Tailscale và kết nối TCP Pi → WSL:1883. Artifact MQTT có request ID mới và kiểm thử camera nằm ở `reports/generated/tailscale_network.json` / `tailscale_mqtt_smoke.json`; UI nhận status/telemetry thật. Auto-stop của bot đã được kiểm thử với nhận diện thật; restart dịch vụ Tailscale Pi xong MQTT vẫn phản hồi. SSH host key đã pin cho IP Tailscale Pi, `PI_HOST` cục bộ đã cập nhật. Số đo này thuộc mạng hiện tại, không bảo đảm latency khi đổi mạng.
+Đã đo ping hai chiều qua đường trực tiếp khoảng 10–11 ms, SSH qua Tailscale và kết nối TCP Pi → WSL:1883. UI đã nhận status/telemetry thật trong lần kiểm chứng; các smoke artifact mạng cũ đã được dọn, trạng thái triển khai model được giữ trong report/experiments/team_20261020_son_live/deployment.json. Auto-stop của bot đã được kiểm thử với nhận diện thật; restart dịch vụ Tailscale Pi xong MQTT vẫn phản hồi. SSH host key đã pin cho IP Tailscale Pi, `PI_HOST` cục bộ đã cập nhật. Số đo này thuộc mạng hiện tại, không bảo đảm latency khi đổi mạng.
 
 ```bash
 tailscale ping --c 3 --timeout 5s 100.83.132.53

@@ -1,0 +1,124 @@
+{
+  "device": "raspberrypi",
+  "architecture": "aarch64",
+  "mode": "replay",
+  "model_version": "1e170d7902b8",
+  "bundle_version": "5010dc47644c",
+  "threads": 2,
+  "opencv_threads": 1,
+  "warmup": 20,
+  "frames": 200,
+  "resolution": [
+    640,
+    480
+  ],
+  "camera_backend": null,
+  "camera_pixel_format": null,
+  "camera_closed": true,
+  "single_face_frames": 200,
+  "face_counts": {
+    "1": 200
+  },
+  "prediction_counts_without_ground_truth": {
+    "son": 200
+  },
+  "timings": {
+    "acquisition": {
+      "samples": 200,
+      "mean_ms": 0.4123171199944409,
+      "p50_ms": 0.410222500022428,
+      "p95_ms": 0.4679368998722565,
+      "std_ms": 0.031693058382377716,
+      "min_ms": 0.37811099991813535,
+      "max_ms": 0.5604259999927308
+    },
+    "detection": {
+      "samples": 200,
+      "mean_ms": 126.98743934499589,
+      "p50_ms": 126.67934549995152,
+      "p95_ms": 128.51376499992284,
+      "std_ms": 1.661413568249103,
+      "min_ms": 125.86169100018196,
+      "max_ms": 144.93165599992608
+    },
+    "crop_preprocess_rejection": {
+      "samples": 200,
+      "mean_ms": 17.83152143500388,
+      "p50_ms": 17.768012000033195,
+      "p95_ms": 18.08603749983604,
+      "std_ms": 0.28813768712578325,
+      "min_ms": 17.59882600003948,
+      "max_ms": 20.597978000068906
+    },
+    "classifier": {
+      "samples": 200,
+      "mean_ms": 30.836261995005998,
+      "p50_ms": 30.63995550007803,
+      "p95_ms": 31.494619549914656,
+      "std_ms": 0.8360836584428207,
+      "min_ms": 30.270002999941426,
+      "max_ms": 37.581748000093285
+    },
+    "recognition_end_to_end": {
+      "samples": 200,
+      "mean_ms": 176.06753989500024,
+      "p50_ms": 175.53918450005312,
+      "p95_ms": 178.11360735001927,
+      "std_ms": 2.627018110861911,
+      "min_ms": 174.54174199997396,
+      "max_ms": 202.10734400006913
+    },
+    "all_frames": {
+      "samples": 200,
+      "mean_ms": 176.08930259999173,
+      "p50_ms": 175.57213499992486,
+      "p95_ms": 178.1340966499556,
+      "std_ms": 2.627299429307494,
+      "min_ms": 174.56126100000802,
+      "max_ms": 202.12736200005565
+    }
+  },
+  "wall_time_s": 35.218190165999886,
+  "pipeline_all_frames_fps": 5.6788835274415295,
+  "recognition_frames_per_second": 5.6788835274415295,
+  "cpu_percent_one_core_units": 129.33657233748082,
+  "cpu_percent_total_capacity": 32.334143084370204,
+  "memory": {
+    "baseline_rss_bytes": 69799936,
+    "pipeline_peak_rss_bytes": 125767680,
+    "rss_after_camera_closed_bytes": 125767680,
+    "process_high_water_rss_bytes": 128000000
+  },
+  "hardware_before": {
+    "temperature_c": 63.783,
+    "cpu_frequency_mhz": 1800.0,
+    "throttled": "throttled=0x0",
+    "system_available_ram_bytes": 3350740992
+  },
+  "hardware_after_pipeline": {
+    "temperature_c": 69.627,
+    "cpu_frequency_mhz": 1800.0,
+    "throttled": "throttled=0x0",
+    "system_available_ram_bytes": 3332042752
+  },
+  "annotation_separate": {
+    "timing": {
+      "samples": 20,
+      "mean_ms": 15.35660425003016,
+      "p50_ms": 14.166112500106465,
+      "p95_ms": 15.750150499923182,
+      "std_ms": 4.945350831855263,
+      "min_ms": 14.071326000021145,
+      "max_ms": 36.904379999896264
+    },
+    "jpeg_bytes_mean": 67361.0,
+    "definition": "20 renders/JPEG encodes on last actual known frame; excludes HTTP/Telegram; not included in pipeline FPS"
+  },
+  "definitions": {
+    "end_to_end": "read start to detection, crop/alignment, RGB/normalize, ONNX and threshold completion; no network",
+    "fps": "Unthrottled continuous vision benchmark; production sampling/cooldown/auto-stop disabled for this measurement",
+    "replay": "Recorded real frame, copy time is not physical camera acquisition",
+    "no_identity_accuracy_claim": "Frame predictions have no verified live ground truth; count performance only"
+  },
+  "frame_sha256": "00c633de2b5d0acd0e8a3381681a3fbc996a8017e4e04a0f78508211b6a81d8e"
+}

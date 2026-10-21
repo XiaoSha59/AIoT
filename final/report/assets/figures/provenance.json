@@ -1,0 +1,177 @@
+{
+  "yunet": {
+    "file": "models/face_detection_yunet_2023mar.onnx",
+    "sha256": "8f2383e4dd3cfbb4553ea8718107fc0423210dc964f9f4280604804ed2552fa4",
+    "input": [
+      1,
+      3,
+      640,
+      640
+    ],
+    "outputs": {
+      "cls_8": [
+        1,
+        6400,
+        1
+      ],
+      "cls_16": [
+        1,
+        1600,
+        1
+      ],
+      "cls_32": [
+        1,
+        400,
+        1
+      ],
+      "obj_8": [
+        1,
+        6400,
+        1
+      ],
+      "obj_16": [
+        1,
+        1600,
+        1
+      ],
+      "obj_32": [
+        1,
+        400,
+        1
+      ],
+      "bbox_8": [
+        1,
+        6400,
+        4
+      ],
+      "bbox_16": [
+        1,
+        1600,
+        4
+      ],
+      "bbox_32": [
+        1,
+        400,
+        4
+      ],
+      "kps_8": [
+        1,
+        6400,
+        10
+      ],
+      "kps_16": [
+        1,
+        1600,
+        10
+      ],
+      "kps_32": [
+        1,
+        400,
+        10
+      ]
+    },
+    "spatial_shapes_are_reference_graph_not_fixed_camera_size": true
+  },
+  "mobilenetv3_small": {
+    "classifier_sha256": "1e170d7902b8836209030c3f9e166dfa1c31bc42a570e37d82294e80d6d15f81",
+    "parameters": 1524006,
+    "feature_output_shapes": {
+      "0": [
+        1,
+        16,
+        112,
+        112
+      ],
+      "1": [
+        1,
+        16,
+        56,
+        56
+      ],
+      "2": [
+        1,
+        24,
+        28,
+        28
+      ],
+      "3": [
+        1,
+        24,
+        28,
+        28
+      ],
+      "4": [
+        1,
+        40,
+        14,
+        14
+      ],
+      "5": [
+        1,
+        40,
+        14,
+        14
+      ],
+      "6": [
+        1,
+        40,
+        14,
+        14
+      ],
+      "7": [
+        1,
+        48,
+        14,
+        14
+      ],
+      "8": [
+        1,
+        48,
+        14,
+        14
+      ],
+      "9": [
+        1,
+        96,
+        7,
+        7
+      ],
+      "10": [
+        1,
+        96,
+        7,
+        7
+      ],
+      "11": [
+        1,
+        96,
+        7,
+        7
+      ],
+      "12": [
+        1,
+        576,
+        7,
+        7
+      ]
+    },
+    "classes": [
+      "Unknown",
+      "dung",
+      "hung",
+      "son",
+      "thanh",
+      "tuan"
+    ],
+    "zero_input_used_only_for_shape_inspection": true
+  },
+  "training_loss": {
+    "source": "report/experiments/team_20261020_son_live/history.json",
+    "sha256": "c419705fa6ce2eb19435ecea8059228629320b9c202ef84e412bc33f35519ecd",
+    "epochs": 13,
+    "best_epoch": 11,
+    "best_val_loss": 2.982358796248132e-07,
+    "scale": "log",
+    "interpolation_or_smoothing": false
+  }
+}

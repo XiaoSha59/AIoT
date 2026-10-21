@@ -1,0 +1,10 @@
+{
+  "source": "participant_video",
+  "video": "dataset/videos/son/1.mp4",
+  "timestamp_s": 16,
+  "source_video_sha256": "3f294bd5464c3f9b90a59f0a5ef47d7fd134452b9e147822ba5fbe775648d95e",
+  "frame_sha256": "00c633de2b5d0acd0e8a3381681a3fbc996a8017e4e04a0f78508211b6a81d8e",
+  "transform": "Aspect-preserving resize and black letterbox to 640x480",
+  "face_count": 1,
+  "purpose": "Deterministic pipeline performance input, not new quality evaluation"
+}

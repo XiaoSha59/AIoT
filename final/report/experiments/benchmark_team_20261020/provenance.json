@@ -1,0 +1,8 @@
+{
+  "script_sha256": {
+    "training/benchmark_runtime.py": "23a92e93ec259247bc4c9b5e8f2a76313a62025c0206831111868042bc7b4641",
+    "training/benchmark_pipeline.py": "c58203f03f4b5e0f74112f0ba9bf63f76da304e317ef6f8e8814bb4a285b7496"
+  },
+  "data_manifest_sha256": "e49dc56d80cda94e6f5132d613b972d0db4f8dfd8ea9b987a1dc777a2b2f88dd",
+  "note": "Reports contain numeric artifacts only; real inputs and PyTorch checkpoint remain private in reports/generated on Pi/laptop."
+}

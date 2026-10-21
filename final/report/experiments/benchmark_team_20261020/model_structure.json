@@ -1,0 +1,29 @@
+{
+  "pytorch_parameter_count": 1524006,
+  "pytorch_parameter_bytes": 6096024,
+  "pytorch_batchnorm_modules": 34,
+  "onnx_node_types": {
+    "Conv": 52,
+    "HardSwish": 19,
+    "Relu": 14,
+    "GlobalAveragePool": 10,
+    "HardSigmoid": 9,
+    "Mul": 9,
+    "Add": 6,
+    "Flatten": 1,
+    "Gemm": 2
+  },
+  "onnx_initializer_data_types": {
+    "FLOAT": 108
+  },
+  "onnx_opset": [
+    [
+      "",
+      17
+    ]
+  ],
+  "onnx_ir_version": 8,
+  "export_do_constant_folding": true,
+  "runtime_optimization": "ORT_ENABLE_ALL; CPUExecutionProvider; sequential execution; intra-op2/inter-op1",
+  "weights_changed_during_benchmark": false
+}
